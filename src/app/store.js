@@ -11,6 +11,7 @@ import tasksListReducer from '../tasksList/tasksListModule';
 import { gameTickReducer } from '../gameTicks/gameTicksModule';
 import { roversReducer, propellantReducer } from '../rover/roverModule';
 import { roverDetailReducer } from '../roversList/roversListModule';
+import { tutorialProgressReducer, tutorialShownReducer } from '../tutorial/tutorialModule';
 
 // middlewares
 import { tickADiddlyAMiddlewareARooni } from '../gameTicks/tickMiddleware';
@@ -32,6 +33,8 @@ const reducers = combineReducers({
 	timeSinceLastDustStorm: timeSinceLastDustStormReducer,
 	bestTimes: bestTimesReducer,
 	elapsedTime: elapsedTimeReducer,
+	tutorialProgress: tutorialProgressReducer,
+	tutorialShown: tutorialShownReducer,
 });
 
 // We "need" to attach dispatch to actions so that the rover reducer can dispatch
