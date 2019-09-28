@@ -7,10 +7,12 @@ const COMPLETE_TASK = 'COMPLETE_TASK';
 const INCREMENT_TASK_PROGRESS = 'INCREMENT_TASK_PROGRESS';
 const ORDER_TASKS = 'ORDER_TASKS';
 
+const PROGRESS_CONSTANT = 0.1;
+
 const initialState = Object.freeze([]);
 
-export const cancelTask = (taskId) => (dispatch) => dispatch({ type: CANCEL_TASK, data: taskId });
-export const completeTask = (taskId) => (dispatch) => dispatch({ type: COMPLETE_TASK, data: taskId });
+export const cancelTask = (taskId) => (dispatch) => dispatch({ type: CANCEL_TASK, data: { id: taskId } });
+export const completeTask = (task) => (dispatch) => dispatch({ type: COMPLETE_TASK, data: task });
 export const orderTasks = (tasks) => (dispatch) => dispatch({ type: ORDER_TASKS, data: tasks });
 export const incrementTaskProgress = (taskId) => (dispatch) => dispatch({ type: INCREMENT_TASK_PROGRESS, data: taskId });
 
@@ -21,15 +23,23 @@ const tasksListReducer = (state = initialState, { type, data }) => {
 	case BUILD_ITEM:
 		return [...state, data.task];
 	case CANCEL_TASK:
-		return [...state.filter((val) => val.id !== data)];
-	case COMPLETE_TASK:
-		return state; // @TODO
-	case INCREMENT_TASK_PROGRESS:
-		return state; // @TODO
+	case COMPLETE_TASK: // @TODO we need to update the inventory, not just remove the item
+		return [...state.filter((val) => val.id !== data.id)];
+	case INCREMENT_TASK_PROGRESS: {
+		const index = state.findIndex((val) => val.id === data);
+		const first = state.slice(0, index);
+		const item = state.slice(index, index + 1);
+		const end = state.slice(index + 1);
+		const { progress = 0 } = item;
+		return [...first, { ...item, progress: progress + PROGRESS_CONSTANT }, ...end];
+	}
 	case ORDER_TASKS:
 		return [...data];
-	case TICK:
-		return state; // @TODO
+	case TICK: {
+		const [first, ...rest] = state;
+		const { progress = 0 } = first;
+		return [{ ...first, progress: progress + PROGRESS_CONSTANT }, ...rest];
+	}
 	default:
 		return state;
 	}
