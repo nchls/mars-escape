@@ -332,6 +332,27 @@ export const setRoverStatus = (roverId, status) => (dispatch) => {
 	});
 };
 
+export const SET_ROVER_MODE = 'SET_ROVER_MODE';
+export const setRoverMode = (roverId, mode) => (dispatch) => dispatch({
+	type: SET_ROVER_MODE,
+	roverId: roverId,
+	mode: mode,
+});
+
+export const UNINSTALL_MODULE = 'UNINSTALL_MODULE';
+export const uninstallModule = (roverId, moduleId) => (dispatch) => dispatch({
+	type: UNINSTALL_MODULE,
+	roverId: roverId,
+	moduleId: moduleId,
+});
+
+export const INSTALL_MODULE = 'INSTALL_MODULE';
+export const installModule = (roverId, moduleId) => (dispatch) => dispatch({
+	type: INSTALL_MODULE,
+	roverId: roverId,
+	moduleId: moduleId,
+});
+
 
 const uuid = shortUUID();
 
@@ -371,6 +392,18 @@ export const roversReducer = (state = initialState, action) => {
 		const newState = [...state];
 		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
 		rover.status = action.status;
+		return newState;
+	}
+	case SET_ROVER_MODE: {
+		const newState = [...state];
+		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
+		rover.mode = action.mode;
+		return newState;
+	}
+	case UNINSTALL_MODULE: {
+		const newState = [...state];
+		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
+		rover.modules = rover.modules.filter((checkModuleId) => checkModuleId !== action.moduleId);
 		return newState;
 	}
 	default:

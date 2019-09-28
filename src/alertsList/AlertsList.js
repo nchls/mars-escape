@@ -6,11 +6,9 @@ import { ROVER_STATUSES } from '../rover/roverModule';
 import './alertsList.scss';
 
 const findIncapacitatedRovers = (rovers) => (
-	rovers.filter(e =>
-		e.status === ROVER_STATUSES.LOST ||
-		e.status === ROVER_STATUSES.STUCK ||
-		e.status === ROVER_STATUSES.OUT_OF_POWER
-));
+	rovers.filter((e) => e.status === ROVER_STATUSES.LOST
+		|| e.status === ROVER_STATUSES.STUCK
+		|| e.status === ROVER_STATUSES.OUT_OF_POWER));
 
 const Alert = ({ displayValue }) => (
 	<li className="alert-list-item">
