@@ -1,4 +1,4 @@
-const RESTART_GAME = 'RESTART_GAME';
+export const RESTART_GAME = 'RESTART_GAME';
 const END_GAME = 'END_GAME';
 
 export const restartGame = () => dispatch => dispatch({ type: RESTART_GAME });
