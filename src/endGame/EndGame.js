@@ -6,32 +6,49 @@ import './endGame.scss';
 
 const EndGame = ({ bestTimes, propellant, startApp, restartGame }) => {
 	return (
-		<>
+		<div className="container boxed scrollable endGame-wrapper">
 			{
 				propellant >= 1
 					? (
-						<div className="endGame-success">
-							Wow! You did it! You escaped Mars. Maybe you take a break.
+						<div className="notification is-success endGame-success">
+							Wow! You did it! You escaped Mars. Maybe you should take a break. Or maybe you should try it again.
 						</div>
 					)
 					: (
-						<div className="endGame-failure">
+						<div className="notification is-success endGame-failure">
 							You've run out of rovers and won't be able to make it home.  You can wait for a slow death, or hop in your time machine and try again.
 						</div>
 					)
 			}
-			<ul className="endGame-best-times">
-				{
-					bestTimes.map(({ date, time }, index) => (
-						<li key={index}>
-							<span className="endGame-date">{date}</span>
-							<span className="endGame-time">{time}</span>
-						</li>
-					))
-				}
-			</ul>
-			<button className="button is-large is-primary" onClick={() => { restartGame(); startApp(); }}>Play again!</button>
-		</>
+			{
+				bestTimes.length
+					? (
+						<>
+							<h2 className="title is-3 is-spaced">Best Times</h2>
+							<table className="table is-striped endGame-best-times">
+								<thead>
+									<tr>
+										<th>Date</th>
+										<th>Time</th>
+									</tr>
+								</thead>
+								<tbody>
+									{
+										bestTimes.map(({ date, time }, index) => (
+											<tr key={index}>
+												<td className="endGame-date">{date}</td>
+												<td className="endGame-time">{time} Sols</td>
+											</tr>
+										))
+									}
+								</tbody>
+							</table>
+						</>
+					)
+					: null
+			}
+			<button className="button is-large is-link" onClick={() => { restartGame(); startApp(); }}>Play again!</button>
+		</div>
 	);
 };
 

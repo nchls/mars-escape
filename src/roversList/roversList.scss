@@ -17,13 +17,33 @@
 		display: flex;
 		justify-content: flex-start;
 		.title {
-			margin-bottom: 0;
+			margin-bottom: .5em;
 		}
 		[class*="fa-"] {
 			padding: 0 .8em;
 		}
 		.rover-status {
 			margin-left: auto;
+		}
+	}
+
+	.title.mode-header {
+		margin-bottom: .5em;
+	}
+
+	.title.modules-header {
+		margin-top: 1em;
+		margin-bottom: .5em;
+	}
+
+	.modules-configurator {
+		.subtitle {
+			margin-bottom: 0;
+		}
+		display: flex;
+		justify-content: space-between;
+		> div {
+			width: 50%;
 		}
 	}
 }
