@@ -6,17 +6,26 @@ import { closeBuildDialog, buildItem } from './buildDialogModule';
 import { getAllItems } from '../data/items';
 import { makeNewTask } from '../tasksList/tasksListModule';
 
-const Thingus = ({ item, buildItem }) => (
-	<div className="box" href="#">
-		<h3 className="title is-3">{item.name}</h3>
-		Description: {item.description}<br />
-		Cost: {item.cost}<br />
-		Weight: {item.weight}<br />
-		<button onClick={() => buildItem(item.cost, makeNewTask(item))} className="button">Purchase</button>
-	</div>
-);
+const Thingus = ({ item, buildItem, ore }) => {
+	const disabled = item.cost > ore;
+	return (
+		<div className="box" href="#">
+			<h3 className="title is-3">{item.name}</h3>
+			Description: {item.description}<br />
+			Cost: {item.cost}<br />
+			Weight: {item.weight}<br />
+			<button
+				disabled={disabled}
+				onClick={() => buildItem(item.cost, makeNewTask(item))}
+				className="button"
+			>
+				{disabled ? 'We Require More Minerals' : 'Purchase'}
+			</button>
+		</div>
+	);
+};
 
-const BuildAThingus = ({ isRover = false, header, buildItem }) => {
+const BuildAThingus = ({ isRover = false, header, buildItem, ore }) => {
 	return (
 		// eslint-disable-next-line jsx-a11y/anchor-is-valid
 		<div>
@@ -24,12 +33,12 @@ const BuildAThingus = ({ isRover = false, header, buildItem }) => {
 			{getAllItems()
 				.filter((item) => (isRover ? item.isRover : !item.isRover))
 				// eslint-disable-next-line jsx-a11y/anchor-is-valid
-				.map((item) => <Thingus key={item.id} buildItem={buildItem} item={item} />)}
+				.map((item) => <Thingus key={item.id} ore={ore} buildItem={buildItem} item={item} />)}
 		</div>
 	);
 }
 
-const BuildDialog = ({ isOpen, closeBuildDialog, buildItem }) => {
+const BuildDialog = ({ isOpen, closeBuildDialog, buildItem, ore }) => {
 	const modalClass = `modal${isOpen ? ' is-active' : ''}`;
 	return (
 		<div className={modalClass}>
@@ -40,8 +49,8 @@ const BuildDialog = ({ isOpen, closeBuildDialog, buildItem }) => {
 					<button onClick={closeBuildDialog} className="delete" aria-label="close">Close</button>
 				</header>
 				<section className="modal-card-body">
-					<BuildAThingus buildItem={buildItem} isRover header="Rovers" />
-					<BuildAThingus buildItem={buildItem} header="Modules" />
+					<BuildAThingus ore={ore} buildItem={buildItem} isRover header="Rovers" />
+					<BuildAThingus ore={ore} buildItem={buildItem} header="Modules" />
 				</section>
 			</div>
 		</div>
@@ -50,7 +59,7 @@ const BuildDialog = ({ isOpen, closeBuildDialog, buildItem }) => {
 
 const mapStateToProps = (state) => {
 	return {
-
+		ore: state.ore,
 	};
 };
 
