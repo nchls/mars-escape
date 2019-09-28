@@ -1,15 +1,15 @@
 import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
 
 // reducers
-import appModule from './appModule';
+import appModuleReducer from './appModule';
 import { tickinsReducer, doALittleTick } from '../slowTickins/tickinsModule';
 
 // middlewares
 import { tickADiddlyAMiddlewareARooni } from '../slowTickins/justForTickins';
 
 const reducers = combineReducers({
-    appModule,
-    tickins: tickinsReducer
+    gameOver: appModuleReducer,
+    tickins: tickinsReducer,
 });
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
