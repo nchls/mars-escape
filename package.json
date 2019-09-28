@@ -1,0 +1,47 @@
+{
+  "name": "reactriot2019-mars",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.config.dev.js --watch",
+    "build": "webpack --config webpack.config.prod.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hackbit/reactriot2019-mars.git"
+  },
+  "author": "Ian Nicholas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hackbit/reactriot2019-mars/issues"
+  },
+  "homepage": "https://github.com/Hackbit/reactriot2019-mars#readme",
+  "dependencies": {
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "bulma": "^0.7.5",
+    "core-js": "^3.2.1",
+    "css-loader": "^3.2.0",
+    "eslint": "^6.4.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^2.1.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "react": "^16.10.0",
+    "react-dom": "^16.10.0",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4",
+    "sass-loader": "^8.0.0",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1"
+  }
+}
