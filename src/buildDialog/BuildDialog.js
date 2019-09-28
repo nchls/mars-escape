@@ -36,7 +36,7 @@ const BuildAThingus = ({ isRover = false, header, buildItem, ore }) => {
 				.map((item) => <Thingus key={item.id} ore={ore} buildItem={buildItem} item={item} />)}
 		</div>
 	);
-}
+};
 
 const BuildDialog = ({ isOpen, closeBuildDialog, buildItem, ore }) => {
 	const modalClass = `modal${isOpen ? ' is-active' : ''}`;
