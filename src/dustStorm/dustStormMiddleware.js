@@ -1,7 +1,7 @@
 import { toggleDustStorm } from './dustStormModule';
 
 const NO_DUST_STORM_MULTIPLIER = 0.05;
-const IS_DUST_STORM_MULTIPLIER = 0.75;
+const IS_DUST_STORM_MULTIPLIER = 0.5;
 
 const dustStormMiddleware = (store) => (next) => (action) => {
 	const { isDustStorm, timeSinceLastDustStorm } = store.getState();
