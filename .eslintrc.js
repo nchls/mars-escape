@@ -42,6 +42,10 @@ module.exports = {
 		'object-shorthand': 0,
 		'radix': 0,
 		'prefer-destructuring': 0,
-		'no-use-before-define': 0
+		'no-use-before-define': 0,
+		'quotes': ['error', 'single', { allowTemplateLiterals: true }],
+		'no-console': 0,
+		'no-debugger': 0,
+		'import/prefer-default-export': 0,
 	}
 };

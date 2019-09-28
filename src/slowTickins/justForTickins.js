@@ -1,4 +1,4 @@
-import { doALittleTick } from './tickinsModule';
+import { doALittleTick, TICK } from './tickinsModule';
 
 const GAME_CHILL_LEVEL_BASIS = {
 	1: 500,
@@ -7,10 +7,12 @@ const GAME_CHILL_LEVEL_BASIS = {
 };
 
 export const tickADiddlyAMiddlewareARooni = (store) => (next) => (action) => {
-	const gameSpeed = store.getState().gameSpeed;
-	const gameOver = store.getState().gameOver;
-	if (gameSpeed && !gameOver) {
-		window.setTimeout(() => store.dispatch(doALittleTick()), GAME_CHILL_LEVEL_BASIS[gameSpeed]);
+	if (action.type === TICK) {
+		const gameSpeed = store.getState().gameSpeed;
+		const gameOver = store.getState().gameOver;
+		if (gameSpeed && !gameOver) {
+			window.setTimeout(() => store.dispatch(doALittleTick()), GAME_CHILL_LEVEL_BASIS[gameSpeed]);
+		}
 	}
 	return next(action);
 };

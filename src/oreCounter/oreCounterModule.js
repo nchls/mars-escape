@@ -2,6 +2,10 @@ import { RESTART_GAME } from '../app/appModule';
 import { BUILD_ITEM } from '../buildDialog/buildDialogModule';
 import { CANCEL_TASK } from '../tasksList/tasksListModule';
 
+
+export const ADD_ORE = 'ADD_ORE';
+export const addOre = (ore) => (dispatch) => dispatch({ type: ADD_ORE, data: { ore: ore } });
+
 const oreCounterReducer = (state = 0, { type, data }) => {
 	switch (type) {
 	case RESTART_GAME:
@@ -10,6 +14,8 @@ const oreCounterReducer = (state = 0, { type, data }) => {
 		return state - data.cost;
 	case CANCEL_TASK:
 		return state + data.cost;
+	case ADD_ORE:
+		return state + data.ore;
 	default:
 		return state;
 	}
