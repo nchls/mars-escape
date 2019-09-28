@@ -15,7 +15,8 @@ const initialState = Object.freeze([]);
 export const cancelTask = (task) => (dispatch) => dispatch({ type: CANCEL_TASK, data: task });
 export const completeTask = (task) => (dispatch) => dispatch({ type: COMPLETE_TASK, data: task });
 export const orderTasks = (tasks) => (dispatch) => dispatch({ type: ORDER_TASKS, data: tasks });
-export const incrementTaskProgress = (taskId) => (dispatch) => dispatch({ type: INCREMENT_TASK_PROGRESS, data: taskId });
+export const incrementTaskProgress = (taskId) => (dispatch) => (
+	dispatch({ type: INCREMENT_TASK_PROGRESS, data: taskId }));
 
 const tasksListReducer = (state = initialState, { type, data }) => {
 	switch (type) {
