@@ -12,6 +12,7 @@
 
 .alert-list-item{float:left;list-style-type:none;margin-right:20px;color:red;font-size:larger}.alert-list-value{float:left;list-style-type:none;margin-right:20px;color:red;font-size:larger}
 
+.endGame-wrapper{text-align:center}.endGame-best-times{margin-left:auto;margin-right:auto;width:75%}
 
 @keyframes breeze{0%{background-position:0 0}25%{background-position:100% 0}50%{background-position:100% 100%}75%{background-position:0 100%}to{background-position:0 0}}.dustStorm-overlay{background:linear-gradient(217deg, rgba(150,0,0,0.2), rgba(255,255,255,0.2) 70.71%);font-weight:bold;height:100%;position:fixed;width:100%;-moz-animation-duration:1s;-moz-animation-iteration-count:infinite;-moz-animation-name:breeze;-webkit-animation-duration:1s;-webkit-animation-iteration-count:infinite;-webkit-animation-name:breeze;animation-duration:1s;animation-iteration-count:infinite;animation-name:breeze;background-color:rgba(150,0,0,0.2);background-position:0 0;background-repeat:no-repeat;background-size:200%;pointer-events:none;text-align:center;text-transform:uppercase;top:0}
 

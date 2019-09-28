@@ -15,6 +15,9 @@ const dustStormMiddleware = (store) => (next) => (action) => {
 		}
 	}
 
+	const alteredAction = action;
+	alteredAction.extraData = alteredAction.extraData || {};
+	alteredAction.extraData.isDustStorm = isDustStorm;
 	return next(action);
 };
 
