@@ -1,0 +1,47 @@
+$top-bar-height: 2em;
+
+.top-bar {
+	height: $top-bar-height;
+	display: flex;
+	justify-content: space-between;
+}
+
+.top-controls {
+	display: flex;
+}
+
+@media (min-width: 800px) {
+	.main {
+		height: 750px;
+		@media (min-height: 600px) {
+			height: calc(100vh - #{$top-bar-height});
+		}
+		display: grid;
+		grid-template-columns: [left] 47% [right] 47% [rail] 6%;
+		grid-template-rows: [top] 45% [middle] 45% [bottom] 10%;
+	}
+
+	.tasks-list {
+		grid-column-start: left;
+		grid-row-start: top;
+	}
+	.inventory {
+		grid-column-start: left;
+		grid-row-start: middle;
+	}
+	.rovers-list {
+		grid-column-start: right;
+		grid-row-start: top;
+		grid-row-end: bottom;
+	}
+	.alerts {
+		grid-column-start: left;
+		grid-column-end: rail;
+		grid-row-start: bottom;
+	}
+	.propellantBar {
+		grid-column-start: rail;
+		grid-row-start: top;
+		grid-row-end: none;
+	}
+}
