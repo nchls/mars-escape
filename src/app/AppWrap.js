@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import BuildDialog from '../buildDialog/BuildDialog';
 import GameSpeed from '../gameSpeed/GameSpeed';
 import OreCounter from '../oreCounter/OreCounter';
+import ElapsedTime from '../elapsedTime/ElapsedTime';
 import PropellantBar from '../propellantBar/PropellantBar';
 import TasksList from '../tasksList/TasksList';
 import Inventory from '../inventory/Inventory';
@@ -27,6 +28,9 @@ const AppWrap = ({ gameOver, isBuildDialogOpen, isDustStorm }) => {
 						<div className="top-controls">
 							<div className="game-speed">
 								<GameSpeed />
+							</div>
+							<div className="elapsed-time">
+								<ElapsedTime />
 							</div>
 							<div className="ore-counter">
 								<OreCounter />
