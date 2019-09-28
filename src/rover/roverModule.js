@@ -4,6 +4,7 @@ import { TICK } from '../gameTicks/gameTicksModule';
 import { addOre } from '../oreCounter/oreCounterModule';
 import itemsData from '../data/items';
 
+
 export const ROVER_STATUSES = {
 	WAITING: 'Waiting/charging in garage',
 	TRAVELING_ICE: 'Traveling to ice mining site',
@@ -376,10 +377,17 @@ export const uninstallModule = (roverId, moduleId) => (dispatch) => dispatch({
 });
 
 export const INSTALL_MODULE = 'INSTALL_MODULE';
-export const installModule = (roverId, moduleId) => (dispatch) => dispatch({
+export const installModule = (rover, moduleId) => (dispatch) => dispatch({
 	type: INSTALL_MODULE,
-	roverId: roverId,
+	rover: rover,
 	moduleId: moduleId,
+});
+
+// Action for telling inventory about an item replaced on a rover
+export const ADD_MODULE_TO_INVENTORY = 'ADD_MODULE_TO_INVENTORY';
+export const addModuleToInventory = (module) => (dispatch) => dispatch({
+	type: ADD_MODULE_TO_INVENTORY,
+	module: module,
 });
 
 
@@ -435,6 +443,41 @@ export const roversReducer = (state = initialState, action) => {
 		const newState = [...state];
 		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
 		rover.modules = rover.modules.filter((checkModuleId) => checkModuleId !== action.moduleId);
+
+		// Restore stock parts
+		const module = itemsData.find((checkItem) => checkItem.id === action.moduleId);
+		if (module.name === 'Motors (advanced)') { rover.modules.push(5); }
+		if (module.name === 'Wheels (advanced)') { rover.modules.push(7); }
+		if (module.name === 'Battery (medium)' || module.name === 'Battery (large)') { rover.modules.push(9); }
+		if (module.name === 'GPS') { rover.modules.push(12); }
+
+		return newState;
+	}
+	case INSTALL_MODULE: {
+		const newState = [...state];
+		const rover = newState.find((checkRover) => checkRover.id === action.rover.id);
+		rover.modules.push(action.moduleId);
+
+		// Remove parts that are replaced by this one
+		const module = itemsData.find((checkItem) => checkItem.id === action.moduleId);
+		if (module.replaces) {
+			const replacedModules = rover.modules.filter((checkModuleId) => module.replaces.indexOf(checkModuleId) !== -1);
+			rover.modules = rover.modules.filter((checkModuleId) => module.replaces.indexOf(checkModuleId) === -1);
+
+			// Tell the inventory about the parts that were removed
+			replacedModules.forEach((replacedModuleId) => {
+				const replacedModule = itemsData.find((checkItem) => checkItem.id === replacedModuleId);
+				if (!replacedModule.isStock) {
+					setTimeout(() => (
+						addModuleToInventory({
+							itemId: replacedModule.id,
+							name: replacedModule.name,
+						})(action.dispatch)
+					), 1);
+				}
+			});
+		}
+
 		return newState;
 	}
 	default:

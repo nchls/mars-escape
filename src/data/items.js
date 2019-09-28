@@ -83,7 +83,7 @@ const itemsData = [
 		description: 'Who wants to run out of power out on the dunes? So embarrassing.',
 		weight: 130,
 		capacity: 2,
-		replaces: [9],
+		replaces: [9, 11],
 	},
 	{
 		id: 11,
@@ -99,6 +99,7 @@ const itemsData = [
 		name: 'Compass',
 		weight: 10,
 		effectiveness: 100,
+		replaces: [13],
 	},
 	{
 		id: 13,
@@ -107,7 +108,7 @@ const itemsData = [
 		cost: 250,
 		weight: 20,
 		effectiveness: 300,
-		replaces: [13],
+		replaces: [12],
 	},
 	{
 		id: 14,
@@ -115,6 +116,7 @@ const itemsData = [
 		cost: 150,
 		weight: 150,
 		effectiveness: 100,
+		replaces: [15],
 	},
 	{
 		id: 15,
@@ -132,6 +134,7 @@ const itemsData = [
 		cost: 100,
 		weight: 100,
 		current: 100,
+		replaces: [17, 18],
 	},
 	{
 		id: 17,
@@ -140,7 +143,7 @@ const itemsData = [
 		cost: 150,
 		weight: 130,
 		current: 180,
-		replaces: [16],
+		replaces: [16, 18],
 	},
 	{
 		id: 18,
@@ -157,6 +160,7 @@ const itemsData = [
 		description: 'Some small, light tanks for storing low volumes of ice, ore, or notes from a chick.',
 		weight: 100,
 		capacity: 1,
+		replaces: [20],
 	},
 	{
 		id: 20,

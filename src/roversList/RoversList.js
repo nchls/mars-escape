@@ -12,8 +12,14 @@ import {
 	getRoverModules,
 	setRoverMode,
 	uninstallModule,
+	installModule,
 } from '../rover/roverModule';
-import { openRoverDetail, closeRoverDetail } from './roversListModule';
+import {
+	openRoverDetail,
+	closeRoverDetail,
+	getDistinctEquippableParts,
+} from './roversListModule';
+import itemsData from '../data/items';
 
 
 const RoverWarning = ({ children }) => {
@@ -30,27 +36,71 @@ const RoverWarning = ({ children }) => {
 	);
 };
 
-const Module = ({ rover, module, removalDisabled, uninstallModule }) => {
+const InstalledModule = ({ rover, module, removalDisabled, uninstallModule }) => {
+	let title;
+	if (module.isStock) {
+		title = 'Stock part';
+	} else {
+		if (removalDisabled) {
+			title = 'You can uninstall a part only when the rover is in the garage.';
+		}
+		title = 'Uninstall this part';
+	}
+
 	return (
-		<div className="module tag">
-			{ module.name }
+		<button
+			className="button is-small is-fullwidth"
+			onClick={() => {
+				if (!removalDisabled && !module.isStock) {
+					return uninstallModule(rover.id, module.id);
+				}
+			}}
+			title={title}
+		>
 			{ !module.isStock && !removalDisabled && (
-				<button
-					className="delete is-small"
-					onClick={() => uninstallModule(rover.id, module.id)}
-				/>
+				<span className="icon is-small">
+					<i className="fas fa-times-circle fa-align-right" />
+				</span>
 			) }
-		</div>
+			<span>{ module.name }</span>
+		</button>
+	);
+};
+
+const AvailableModule = ({ rover, module, installationDisabled, installModule }) => {
+	return (
+		<button
+			className="button is-small is-fullwidth"
+			onClick={() => {
+				if (!installationDisabled && !module.isStock) {
+					return installModule(rover, module.id);
+				}
+			}}
+			title={
+				installationDisabled
+					? 'You can install a part only when the rover is in the garage.'
+					: 'Install this part'
+			}
+		>
+			<span>{ module.name }</span>
+			{ !module.isStock && !installationDisabled && (
+				<span className="icon is-small">
+					<i className="fas fa-plus-circle fa-align-right" />
+				</span>
+			) }
+		</button>
 	);
 };
 
 const RoversList = ({
 	rovers,
 	roverDetail,
+	inventory,
 	openRoverDetail,
 	closeRoverDetail,
 	setRoverMode,
 	uninstallModule,
+	installModule,
 }) => {
 	return (
 		<>
@@ -120,6 +170,7 @@ const RoversList = ({
 					}
 
 					const changesDisabled = (rover.status !== ROVER_STATUSES.WAITING);
+					const distinctEquippableParts = getDistinctEquippableParts(inventory, rover);
 
 					return (
 						<li key={rover.id} className="rover-detail">
@@ -170,31 +221,47 @@ const RoversList = ({
 							<div className="modules-configurator">
 								<div className="available-modules">
 									<h5 className="subtitle is-6">Available</h5>
-									<ul />
+									<div className="field">
+										{ distinctEquippableParts.map((itemId) => {
+											const module = itemsData.find((checkItem) => checkItem.id === itemId);
+											return (
+												<div key={module.id}>
+													<AvailableModule
+														installationDisabled={changesDisabled}
+														rover={rover}
+														module={module}
+														installModule={installModule}
+													/>
+												</div>
+											);
+										}) }
+									</div>
 								</div>
 								<div className="installed-modules">
 									<h5 className="subtitle is-6">Installed</h5>
-									<ul className="installed-modules">
+									<div className="field">
 										{ modules.map((module) => {
 											if (module.name.indexOf('Rover') !== -1) {
 												return null;
 											}
 											return (
-												<li key={module.id}>
-													<Module
+												<div key={module.id}>
+													<InstalledModule
 														removalDisabled={changesDisabled}
 														rover={rover}
 														module={module}
 														uninstallModule={uninstallModule}
 													/>
-												</li>
+												</div>
 											);
 										}) }
-									</ul>
+									</div>
 								</div>
 							</div>
 
-							<button className="button is-primary" onClick={closeRoverDetail}>Done</button>
+							<div className="buttons is-right">
+								<button className="button is-primary" onClick={closeRoverDetail}>Done</button>
+							</div>
 						</li>
 					);
 				}) }
@@ -207,6 +274,7 @@ const mapStateToProps = (state) => {
 	return {
 		rovers: state.rovers,
 		roverDetail: state.roverDetail,
+		inventory: state.inventory,
 	};
 };
 
@@ -216,6 +284,7 @@ const mapDispatchToProps = (dispatch) => {
 		closeRoverDetail: () => closeRoverDetail()(dispatch),
 		setRoverMode: (roverId, mode) => setRoverMode(roverId, mode)(dispatch),
 		uninstallModule: (roverId, moduleId) => uninstallModule(roverId, moduleId)(dispatch),
+		installModule: (rover, moduleId) => installModule(rover, moduleId)(dispatch),
 	};
 };
 

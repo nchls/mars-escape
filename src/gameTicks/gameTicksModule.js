@@ -1,4 +1,5 @@
 import { RESTART_GAME } from '../app/appModule';
+
 export const TICK = 'TICK';
 export const CHANGE_GAME_SPEED = 'CHANGE_GAME_SPEED';
 

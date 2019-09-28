@@ -44,6 +44,18 @@
 		justify-content: space-between;
 		> div {
 			width: 50%;
+			&:first-child {
+				padding-right: .5em;
+			}
+			&:last-child {
+				padding-left: .5em;
+			}
+		}
+		.available-modules .button {
+			justify-content: space-between;
+		}
+		.installed-modules .button {
+			justify-content: flex-start;
 		}
 	}
 }
