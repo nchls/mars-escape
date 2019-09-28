@@ -1,7 +1,7 @@
 import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
 
 // reducers
-import appModuleReducer from './appModule';
+import { gameOverReducer } from './appModule';
 import buildDialogReducer from '../buildDialog/buildDialogModule';
 import oreCounterReducer from '../oreCounter/oreCounterModule';
 import tasksListReducer from '../tasksList/tasksListModule';
@@ -11,7 +11,7 @@ import { tickinsReducer, doALittleTick } from '../slowTickins/tickinsModule';
 import { tickADiddlyAMiddlewareARooni } from '../slowTickins/justForTickins';
 
 const reducers = combineReducers({
-	gameOver: appModuleReducer,
+	gameOver: gameOverReducer,
 	isBuildDialogOpen: buildDialogReducer,
 	ore: oreCounterReducer,
 	tasks: tasksListReducer,

@@ -4,7 +4,7 @@ const END_GAME = 'END_GAME';
 export const restartGame = () => (dispatch) => dispatch({ type: RESTART_GAME });
 export const endGame = () => (dispatch) => dispatch({ type: END_GAME });
 
-const appModuleReducer = (state = false, { type }) => {
+export const gameOverReducer = (state = false, { type }) => {
 	switch (type) {
 	case RESTART_GAME:
 		return false;
@@ -14,5 +14,3 @@ const appModuleReducer = (state = false, { type }) => {
 		return state;
 	}
 };
-
-export default appModuleReducer;
