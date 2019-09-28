@@ -1,0 +1,39 @@
+$column-size: 1%;
+
+@mixin progress-tick-x {
+	@for $i from 1 through 100 {
+		.progress-tick-#{$i} {
+			width: $column-size * $i;
+			height: 100%;
+			@media (min-width: 800px) {
+				width: 100%;
+				height: $column-size * $i;
+			}
+		}
+	}
+}
+
+@include progress-tick-x;
+
+.progress-vertical {
+	display: inline-block;
+	width: 100%;
+	height: 1em;
+	@media (min-width: 800px) {
+		height: 90%;
+	}
+	box-shadow: 0px 4px 6px #ccc;
+}
+
+.progress-outer {
+	position: relative;
+	border-radius: 1em;
+}
+
+.progress-bar {
+	box-shadow: 0px 4px 6px rgba(100,100,100,0.6);
+	position: absolute;
+	bottom: 0;
+	background-color: green;
+	border-radius: 1em;
+}
