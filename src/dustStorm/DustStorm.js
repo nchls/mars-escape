@@ -4,17 +4,18 @@ import { connect } from 'react-redux';
 import './dustStorm.scss';
 
 
-const DustStorm = ({ isDustStorm }) => {
+const DustStorm = ({ isDustStorm, timeSinceLastDustStorm }) => {
 	return isDustStorm
 		? (
-			<div className="dustStorm-overlay">Dust storm!</div>
+			<div className="dustStorm-overlay">Dust storm! - {timeSinceLastDustStorm} Sols</div>
 		)
 		: null;
 };
 
-const mapStateToProps = ({ isDustStorm }) => {
+const mapStateToProps = ({ isDustStorm, timeSinceLastDustStorm }) => {
 	return {
 		isDustStorm,
+		timeSinceLastDustStorm,
 	};
 };
 
