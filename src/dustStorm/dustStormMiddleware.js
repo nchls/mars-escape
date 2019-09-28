@@ -11,7 +11,7 @@ const dustStormMiddleware = (store) => (next) => (action) => {
 	if (comparisonRoll > 1) {
 		const randomizer = 100 * Math.random();
 		if (randomizer < comparisonRoll) {
-			toggleDustStorm()(store.dispatch);
+			setTimeout(() => toggleDustStorm()(store.dispatch), 0);
 		}
 	}
 
