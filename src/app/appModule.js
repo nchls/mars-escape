@@ -1,6 +1,8 @@
+export const START_APP = 'START_APP';
 export const RESTART_GAME = 'RESTART_GAME';
 const END_GAME = 'END_GAME';
 
+export const startApp = () => ({ type: START_APP });
 export const restartGame = () => (dispatch) => dispatch({ type: RESTART_GAME });
 export const endGame = () => (dispatch) => dispatch({ type: END_GAME });
 

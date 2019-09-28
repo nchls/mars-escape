@@ -1,7 +1,7 @@
 import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
 
 // reducers
-import { gameOverReducer } from './appModule';
+import { gameOverReducer, startApp } from './appModule';
 import buildDialogReducer from '../buildDialog/buildDialogModule';
 import oreCounterReducer from '../oreCounter/oreCounterModule';
 import tasksListReducer from '../tasksList/tasksListModule';
@@ -25,6 +25,7 @@ const store = createStore(
 	composeEnhancers(applyMiddleware(...middleware)),
 );
 
+store.dispatch(startApp());
 store.dispatch(doALittleTick());
 
 export default store;
