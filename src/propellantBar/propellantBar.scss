@@ -1,3 +1,7 @@
+.propellantBar {
+	text-align: center;
+}
+
 .propellantBar-label {
 	font-weight: bold;
 	font-size: 16px;
@@ -8,4 +12,18 @@
 
 .propellantBar-percent {
 	text-align: center;
+}
+
+.button.propellantBar-button {
+	box-sizing: border-box;
+	height: 100%;
+	max-width: 100%;
+	text-transform: uppercase;
+    text-orientation: upright;
+	white-space: unset;
+	width: 100%;
+	@media (min-width: 800px) {
+		width: 4rem;
+	}
+    word-break: break-all;
 }

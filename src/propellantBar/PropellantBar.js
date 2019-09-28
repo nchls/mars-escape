@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { endGame } from '../app/appModule';
 import ProgressBar from '../progressBar/ProgressBar';
 
 import './propellantBar.scss';
-
 
 const PropellantBar = ({ propellant }) => {
 	const asPercentage = Math.floor(propellant * 100);
@@ -22,7 +22,12 @@ const PropellantBar = ({ propellant }) => {
 			</>
 		)
 		: (
-			<button>Launch</button>
+			<button
+				className="button is-large is-success propellantBar-button"
+				onClick={endGame}
+			>
+				Launch
+			</button>
 		);
 };
 
