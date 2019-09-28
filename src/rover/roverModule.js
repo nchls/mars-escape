@@ -9,6 +9,7 @@ export const ROVER_STATUSES = {
 	WAITING: 'Waiting/charging in garage',
 	TRAVELING_ICE: 'Traveling to ice mining site',
 	TRAVELING_ORE: 'Traveling to ore mining site',
+	TRAVELING_RESCUE: 'Traveling to incapacitated rover',
 	MINING_ICE: 'Mining ice',
 	MINING_ORE: 'Mining ore',
 	RETURNING: 'Returning to base',
@@ -23,11 +24,14 @@ export const ROVER_STATUSES = {
 const DRIVING_STATUSES = [
 	ROVER_STATUSES.TRAVELING_ICE,
 	ROVER_STATUSES.TRAVELING_ORE,
+	ROVER_STATUSES.TRAVELING_RESCUE,
 	ROVER_STATUSES.RETURNING,
 	ROVER_STATUSES.TOWING,
 ];
 
 const MINING_STATUSES = [ROVER_STATUSES.MINING_ICE, ROVER_STATUSES.MINING_ORE];
+
+const RESCUEABLE_STATUSES = [ROVER_STATUSES.LOST, ROVER_STATUSES.STUCK, ROVER_STATUSES.OUT_OF_POWER];
 
 export const ROVER_MODES = {
 	WAIT: 'Wait in garage',
@@ -37,23 +41,25 @@ export const ROVER_MODES = {
 };
 
 export const ROVER_ENERGY_COSTS = {
-	IDLE: 0.0003,
-	DRIVING: 0.003,
-	MINING: 0.003,
-	CHARGING: 0.009,
+	IDLE: 0.0004,
+	DRIVING: 0.004,
+	MINING: 0.004,
+	CHARGING: 0.012,
 };
 
 export const WORK_RANDOMNESS = 0.7;
 
 export const ROVER_WEIGHT_EFFECT_ON_SPEED = 400;
 
-export const ROVER_DRIVING_SPEED_MULTIPLICAND = 0.0003;
+export const ROVER_DRIVING_SPEED_MULTIPLICAND = 0.0004;
 
-export const ROVER_MINING_SPEED_MULTIPLICAND = 0.0003;
+export const ROVER_MINING_SPEED_MULTIPLICAND = 0.0004;
 
 export const PROPELLANT_LOAD_MULTIPLICAND = 0.01;
 
 export const ORE_LOAD_MULTIPLICAND = 100;
+
+export const ROVER_TANK_RESOURCE_WEIGHT_MULTIPLICAND = 400;
 
 export const getRoverModules = (rover) => {
 	return rover.modules.map((moduleId) => itemsData.find((item) => moduleId === item.id));
@@ -83,17 +89,23 @@ export const getRoverBatteryCapacity = (rover) => {
 	return capacity;
 };
 
-export const getRoverWeight = (rover) => {
+export const getRoverWeight = (rover, rovers) => {
 	const modules = getRoverModules(rover);
-	const weight = modules.reduce((accumulator, module) => {
+	let weight = modules.reduce((accumulator, module) => {
 		return accumulator + module.weight;
 	}, 0);
+	const tanksCapacity = getRoverTanksCapacity(rover);
+	weight += rover.tanksLoad * tanksCapacity * ROVER_TANK_RESOURCE_WEIGHT_MULTIPLICAND;
+	if (rover.status === ROVER_STATUSES.TOWING && rover.rescuingId !== undefined) {
+		const towingRover = rovers.find((checkRover) => checkRover.id === rover.rescuingId);
+		weight += getRoverWeight(towingRover, []);
+	}
 	return weight;
 };
 
-export const getRoverDrivingSpeed = (rover) => {
+export const getRoverDrivingSpeed = (rover, rovers) => {
 	const modules = getRoverModules(rover);
-	const weight = getRoverWeight(rover);
+	const weight = getRoverWeight(rover, rovers);
 	const torque = modules.reduce((accumulator, module) => {
 		let val = accumulator;
 		if (module.name.indexOf('Motors') !== -1) {
@@ -132,6 +144,19 @@ export const getRoverTanksCapacity = (rover) => {
 	return capacity;
 };
 
+export const getRoverStatusDisplay = (rover, rovers) => {
+	if (![ROVER_STATUSES.TRAVELING_RESCUE, ROVER_STATUSES.TOWING].includes(rover.status)) {
+		return rover.status;
+	}
+	const rescuingRover = rovers.find((checkRover) => checkRover.id === rover.rescuingId);
+	if (rover.status === ROVER_STATUSES.TRAVELING_RESCUE) {
+		return `Traveling to incapacitated ${rescuingRover.name}`;
+	}
+	if (rover.status === ROVER_STATUSES.TOWING) {
+		return `Towing incapacitated ${rescuingRover.name} back to base`;
+	}
+};
+
 export const getRoverName = (rovers) => {
 	const names = [
 		'Curiosity',
@@ -162,17 +187,20 @@ export const getRoverName = (rovers) => {
 };
 
 const reduceRoverTick = (rovers, dispatch) => {
+	const beingRescuedInThisLoop = [];
 	const roversCopy = rovers.map((modelRover) => {
 		const rover = { ...modelRover };
 		const {
+			id,
 			mode,
 			status,
 			batteryCharge,
 			progress,
 			tanksLoad,
+			rescuingId,
 		} = rover;
 		const batteryCapacity = getRoverBatteryCapacity(rover);
-		const drivingSpeed = getRoverDrivingSpeed(rover);
+		const drivingSpeed = getRoverDrivingSpeed(rover, rovers);
 		const workRandomness = (Math.random() * WORK_RANDOMNESS) + (1 - (WORK_RANDOMNESS / 2));
 
 		rover.batteryCharge -= ROVER_ENERGY_COSTS.IDLE;
@@ -189,8 +217,15 @@ const reduceRoverTick = (rovers, dispatch) => {
 
 		if (batteryCharge <= ROVER_ENERGY_COSTS.IDLE) {
 			rover.batteryCharge = 0;
+			if (rover.status === ROVER_STATUSES.TOWING) {
+				const droppedId = rover.rescuingId;
+				setTimeout(() => setRoverStatus(droppedId, ROVER_STATUSES.LOST)(dispatch), 1);
+				rover.rescuingId = undefined;
+			}
 			if (![ROVER_STATUSES.WAIT, ROVER_STATUSES.TOWED].includes(rover.status)) {
 				rover.status = ROVER_STATUSES.OUT_OF_POWER;
+				rover.tanksLoad = 0;
+				rover.progress = 0;
 			}
 		}
 
@@ -200,11 +235,31 @@ const reduceRoverTick = (rovers, dispatch) => {
 
 			if (rover.batteryCharge > batteryCapacity) {
 				rover.batteryCharge = batteryCapacity;
+
 				if (mode === ROVER_MODES.MINE_ICE) {
 					rover.status = ROVER_STATUSES.TRAVELING_ICE;
-				}
-				if (mode === ROVER_MODES.MINE_ORE) {
+				} else if (mode === ROVER_MODES.MINE_ORE) {
 					rover.status = ROVER_STATUSES.TRAVELING_ORE;
+				} else if (mode === ROVER_MODES.RESCUE) {
+					const rescuedRoverIds = rovers.reduce((accumulator, checkRover) => {
+						if (checkRover.rescuingId !== undefined) {
+							accumulator.push(checkRover.rescuingId);
+						}
+						return accumulator;
+					}, []);
+					const roversNeedingRescue = rovers.filter((checkRover) => {
+						return (
+							checkRover.id !== id
+							&& !rescuedRoverIds.includes(checkRover.id)
+							&& !beingRescuedInThisLoop.includes(checkRover.id)
+							&& RESCUEABLE_STATUSES.includes(checkRover.status)
+						);
+					});
+					if (roversNeedingRescue.length) {
+						rover.rescuingId = roversNeedingRescue[0].id;
+						beingRescuedInThisLoop.push(rover.rescuingId);
+						rover.status = ROVER_STATUSES.TRAVELING_RESCUE;
+					}
 				}
 			}
 		}
@@ -218,6 +273,10 @@ const reduceRoverTick = (rovers, dispatch) => {
 				}
 				if (mode === ROVER_MODES.MINE_ORE) {
 					rover.status = ROVER_STATUSES.MINING_ORE;
+				}
+				if (mode === ROVER_MODES.RESCUE) {
+					rover.status = ROVER_STATUSES.TOWING;
+					setTimeout(() => setRoverStatus(rescuingId, ROVER_STATUSES.TOWED)(dispatch), 1);
 				}
 			}
 		}
@@ -247,6 +306,13 @@ const reduceRoverTick = (rovers, dispatch) => {
 			rover.status = ROVER_STATUSES.WAITING;
 		}
 
+		if (status === ROVER_STATUSES.TOWING && progress >= 1) {
+			rover.progress = 0;
+			rover.rescuingId = undefined;
+			rover.status = ROVER_STATUSES.WAITING;
+			setTimeout(() => setRoverStatus(rescuingId, ROVER_STATUSES.WAITING)(dispatch), 1);
+		}
+
 		return rover;
 	});
 
@@ -256,6 +322,15 @@ const reduceRoverTick = (rovers, dispatch) => {
 
 export const ADD_PROPELLANT = 'ADD_PROPELLANT';
 export const addPropellant = (propellant) => (dispatch) => dispatch({ type: ADD_PROPELLANT, val: propellant });
+
+export const SET_ROVER_STATUS = 'SET_ROVER_STATUS';
+export const setRoverStatus = (roverId, status) => (dispatch) => {
+	return dispatch({
+		type: SET_ROVER_STATUS,
+		roverId: roverId,
+		status: status,
+	});
+};
 
 
 const uuid = shortUUID();
@@ -273,7 +348,7 @@ const initialState = Object.freeze([
 		progress: 0,
 		batteryCharge: 1,
 		tanksLoad: 0,
-		towing: undefined,
+		rescuingId: undefined,
 	},
 	{
 		id: uuid.new(),
@@ -284,7 +359,7 @@ const initialState = Object.freeze([
 		progress: 0,
 		batteryCharge: 1,
 		tanksLoad: 0,
-		towing: undefined,
+		rescuingId: undefined,
 	},
 ]);
 
@@ -292,6 +367,12 @@ export const roversReducer = (state = initialState, action) => {
 	switch (action.type) {
 	case TICK:
 		return reduceRoverTick(state, action.dispatch);
+	case SET_ROVER_STATUS: {
+		const newState = [...state];
+		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
+		rover.status = action.status;
+		return newState;
+	}
 	default:
 		return state;
 	}
