@@ -1,4 +1,4 @@
-import { START_APP } from '../app/appModule'; 
+import { START_APP } from '../app/appModule';
 import { nextTick, TICK } from './gameTicksModule';
 
 const GAME_CHILL_LEVEL_BASIS = {

@@ -1,5 +1,3 @@
-import { START_APP } from '../app/appModule';
-
 export const TICK = 'TICK';
 export const CHANGE_GAME_SPEED = 'CHANGE_GAME_SPEED';
 
@@ -16,8 +14,6 @@ export const gameTickReducer = (store = initial, action) => {
 			return action.gameSpeed;
 		}
 		return store;
-	case START_APP:
-		
 	default:
 		return store;
 	}
