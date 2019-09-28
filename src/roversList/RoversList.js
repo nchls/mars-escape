@@ -3,28 +3,59 @@ import { connect } from 'react-redux';
 import ProgressBar from '../progressBar/ProgressBar';
 
 import './roversList.scss';
-import { getRoverWeight, getRoverDrivingSpeed, getRoverStatusDisplay } from '../rover/roverModule';
+import {
+	ROVER_MODES,
+	getRoverStatusDisplay,
+	getRoverBatteryCapacity,
+	getRoverTanksCapacity,
+	getRoverModules,
+} from '../rover/roverModule';
 
 
 const RoversList = ({ rovers }) => {
 	return (
 		<>
-			<p>Rovers list</p>
+			<h2 className="title is-5">Rovers</h2>
 			<ul>
 				{ rovers.map((rover) => {
 					const progress = Math.floor(100 * rover.progress);
-					const battery = Math.floor(100 * rover.batteryCharge);
-					const tanksLoad = Math.floor(100 * rover.tanksLoad);
+					const battery = Math.floor(100 * (rover.batteryCharge / getRoverBatteryCapacity(rover)));
+					const tanksLoad = Math.floor(100 * (rover.tanksLoad / getRoverTanksCapacity(rover)));
+					const modules = getRoverModules(rover);
 					return (
-						<li key={rover.id} style={{ padding: '.5em' }}>
-							<div key="1">Name: { rover.name }</div>
-							<div key="2">Mode: { rover.mode }</div>
-							<div key="3">Status: { getRoverStatusDisplay(rover, rovers) }</div>
-							<div key="4">Progress: {progress}% <ProgressBar color="yellow" id={`${rover.id}-progress`} progress={progress} /></div>
-							<div key="5">Battery charge: {battery}% <ProgressBar color="red" id={`${rover.id}-battery`} progress={battery} /></div>
-							<div key="6">Tanks load: {tanksLoad}% <ProgressBar color="blue" id={`${rover.id}-tanks`} progress={tanksLoad} /></div>
-							<div key="7">Weight: { getRoverWeight(rover, rovers) }</div>
-							<div key="8">Speed: { getRoverDrivingSpeed(rover, rovers) }</div>
+						<li key={rover.id} className="rover">
+							<div className="head">
+								<h3 className="title is-6 rover-name">{ rover.name }</h3>
+								{ rover.mode === ROVER_MODES.MINE_ICE && <i className="fas fa-cube" /> }
+								{ rover.mode === ROVER_MODES.MINE_ORE && <i className="far fa-gem" /> }
+								{ rover.mode === ROVER_MODES.RESCUE && <i className="fas fa-ambulance" /> }
+								<div className="rover-status">
+									{ getRoverStatusDisplay(rover, rovers) }
+								</div>
+							</div>
+							<div key="4">
+								Progress: <ProgressBar
+									color="red"
+									id={`${rover.id}-progress`}
+									progress={progress}
+								/>
+							</div>
+							<div key="5">
+								Battery charge: <ProgressBar
+									color="yellow"
+									id={`${rover.id}-battery`}
+									progress={battery}
+								/>
+							</div>
+							{ modules.find((module) => module.name.indexOf('Tanks') !== -1) !== undefined && (
+								<div key="6">
+									Tanks load: <ProgressBar
+										color="blue"
+										id={`${rover.id}-tanks`}
+										progress={tanksLoad}
+									/>
+								</div>
+							) }
 						</li>
 					);
 				}) }

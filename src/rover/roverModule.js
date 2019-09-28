@@ -353,7 +353,7 @@ const initialState = Object.freeze([
 	{
 		id: uuid.new(),
 		name: secondRoverName,
-		modules: [1, 5, 7, 9, 12, 14, 19],
+		modules: [1, 5, 7, 9, 12, 14, 22],
 		mode: ROVER_MODES.MINE_ORE,
 		status: ROVER_STATUSES.WAITING,
 		progress: 0,

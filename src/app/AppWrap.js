@@ -22,8 +22,8 @@ const AppWrap = ({ gameOver, isBuildDialogOpen, roverDetail, isDustStorm }) => {
 			{ !gameOver ? (
 				<>
 					<div className="top-bar">
-						<header className="title">
-							<h1>Escape From Mars</h1>
+						<header className="app-title">
+							<h1 className="title">Escape From Mars</h1>
 						</header>
 						<div className="top-controls">
 							<div className="game-speed">

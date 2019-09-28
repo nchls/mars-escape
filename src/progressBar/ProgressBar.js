@@ -16,7 +16,6 @@ const ProgressBar = ({
 			aria-valuenow={progress}
 			className={`progress-bar progress-tick-${progress} progress-${color}`}
 			id={id}
-			role="progressbar"
 		/>
 	</div>
 );
