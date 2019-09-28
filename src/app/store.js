@@ -8,6 +8,7 @@ import oreCounterReducer from '../oreCounter/oreCounterModule';
 import tasksListReducer from '../tasksList/tasksListModule';
 import { gameTickReducer } from '../gameTicks/gameTicksModule';
 import { roversReducer, propellantReducer } from '../rover/roverModule';
+import { roverDetailReducer } from '../roversList/roversListModule';
 
 // middlewares
 import tasksListMiddleware from '../tasksList/tasksListMiddleware';
@@ -15,6 +16,7 @@ import { tickADiddlyAMiddlewareARooni } from '../gameTicks/tickMiddleware';
 
 const reducers = combineReducers({
 	rovers: roversReducer,
+	roverDetail: roverDetailReducer,
 	gameOver: gameOverReducer,
 	gameSpeed: gameTickReducer,
 	inventory: inventoryReducer,

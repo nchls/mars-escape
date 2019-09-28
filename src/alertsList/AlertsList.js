@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import {ROVER_STATUSES} from '../rover/roverModule';
+import { ROVER_STATUSES } from '../rover/roverModule';
 
 import './alertsList.scss';
 
@@ -29,8 +29,7 @@ const AlertsList = ({ rovers, isDustStorm }) => {
 			<p> Alerts List </p>
 			<ul>
 				{isDustStorm
-					&& <Alert displayValue="Dust Storm!" />
-				}
+					&& <Alert displayValue="Dust Storm!" />}
 				{incapacitatedRovers.map((rover) => <Alert key={rover.id} displayValue={`${rover.name} is ${rover.status}`} />)}
 			</ul>
 		</div>

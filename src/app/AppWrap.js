@@ -10,13 +10,12 @@ import Inventory from '../inventory/Inventory';
 import RoversList from '../roversList/RoversList';
 import AlertsList from '../alertsList/AlertsList';
 import EndGame from '../endGame/EndGame';
-import RoverDetail from '../roverDetail/RoverDetail';
 import DustStorm from '../dustStorm/DustStorm';
 
 import './app.scss';
 
 
-const AppWrap = ({ gameOver, isBuildDialogOpen, roverDetail, isDustStorm }) => {
+const AppWrap = ({ gameOver, isBuildDialogOpen, isDustStorm }) => {
 	return (
 		<div className="app">
 			{ !gameOver ? (
@@ -52,7 +51,6 @@ const AppWrap = ({ gameOver, isBuildDialogOpen, roverDetail, isDustStorm }) => {
 						</div>
 					</div>
 					{ isBuildDialogOpen && <BuildDialog /> }
-					{ roverDetail !== undefined && <RoverDetail /> }
 					{ isDustStorm && <DustStorm /> }
 				</>
 			) : (
@@ -66,7 +64,6 @@ const mapStateToProps = (state) => {
 	return {
 		gameOver: state.gameOver,
 		isBuildDialogOpen: state.isBuildDialogOpen,
-		roverDetail: state.roverDetail,
 		isDustStorm: state.isDustStorm,
 	};
 };
