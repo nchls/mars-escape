@@ -1,18 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import ProgressBar from '../progressBar/ProgressBar';
 
 import './propellantBar.scss';
 
 
-const PropellantBar = ({ }) => {
+const PropellantBar = ({ propellant }) => {
+	const asPercentage = propellant * 100;
 	return (
-		<p>Propellant bar</p>
+		<>
+			<h2 className="propellantBar_label">Prop.</h2>
+			<ProgressBar progress={asPercentage} />
+		</>
 	);
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ propellant }) => {
 	return {
-
+		propellant,
 	};
 };
 
