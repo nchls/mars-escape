@@ -4,7 +4,7 @@ import { TICK } from '../slowTickins/tickinsModule';
 
 export const CANCEL_TASK = 'CANCEL_TASK';
 
-const COMPLETE_TASK = 'COMPLETE_TASK';
+export const COMPLETE_TASK = 'COMPLETE_TASK';
 const INCREMENT_TASK_PROGRESS = 'INCREMENT_TASK_PROGRESS';
 const ORDER_TASKS = 'ORDER_TASKS';
 

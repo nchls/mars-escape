@@ -6,9 +6,9 @@ import './oreCounter.scss';
 
 const OreCounter = ({ ore }) => {
 	return (
-		<React.Fragment>
+		<>
 			<strong>Ore:</strong> {ore}
-		</React.Fragment>
+		</>
 	);
 };
 
