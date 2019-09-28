@@ -11,7 +11,7 @@ import { tickADiddlyAMiddlewareARooni } from '../slowTickins/justForTickins';
 const reducers = combineReducers({
 	gameOver: appModuleReducer,
 	isBuildDialogOpen: buildDialogReducer,
-	tickins: tickinsReducer,
+	gameSpeed: tickinsReducer,
 });
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
