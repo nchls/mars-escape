@@ -1,8 +1,8 @@
 import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
-import reducer from './reducer';
+import appModule from './appModule';
 
 const reducers = combineReducers({
-	reducer,
+	appModule,
 });
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
