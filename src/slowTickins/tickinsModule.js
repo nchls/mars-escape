@@ -5,14 +5,15 @@ export const doALittleTick = () => ({ type: TICK });
 
 export const notQuiteMyTempo = (thatsMyTempo) => ({ type: CHANGE_GAME_SPEED, tempo: thatsMyTempo });
 
-const initial = Object.freeze({
-	gameSpeed: 1000,
-});
+const initial = 1;
 
 export const tickinsReducer = (store = initial, action) => {
 	switch (action.type) {
 	case CHANGE_GAME_SPEED:
-		return { ...store, gameSpeed: action.tempo };
+		if (action.tempo >= 1 && action.tempo <= 3) {
+			return action.tempo;
+		}
+		return store;
 	default:
 		return store;
 	}
