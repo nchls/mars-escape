@@ -38,8 +38,11 @@ const tasksListReducer = (state = initialState, { type, data }) => {
 		return [...data];
 	case TICK: {
 		const [first, ...rest] = state;
-		const { progress = 0 } = first;
-		return [{ ...first, progress: progress + PROGRESS_CONSTANT }, ...rest];
+		if (first) {
+			const { progress = 0 } = first;
+			return [{ ...first, progress: progress + PROGRESS_CONSTANT }, ...rest];
+		}
+		return state;
 	}
 	default:
 		return state;
