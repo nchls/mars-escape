@@ -35,6 +35,7 @@ export const bestTimesReducer = (state = initialState, { type, data }) => {
 		const bestTimes = [...state, { date, time }]
 			.sort((a, b) => (a.time < b.time ? -1 : 1))
 			.slice(0, 5);
+		console.log({ date, time, bestTimes });
 		return setStorage(bestTimes);
 	}
 	default:
