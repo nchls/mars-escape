@@ -1,5 +1,5 @@
 import shortUUID from 'short-uuid';
-
+import { RESTART_GAME } from '../app/appModule';
 import { TICK } from '../gameTicks/gameTicksModule';
 import { addOre } from '../oreCounter/oreCounterModule';
 import itemsData from '../data/items';
@@ -415,6 +415,8 @@ const initialState = Object.freeze([
 
 export const roversReducer = (state = initialState, action) => {
 	switch (action.type) {
+	case RESTART_GAME:
+		return initialState;
 	case TICK:
 		return reduceRoverTick(state, action.dispatch, action.extraData.isDustStorm);
 	case SET_ROVER_STATUS: {
@@ -442,6 +444,8 @@ export const roversReducer = (state = initialState, action) => {
 
 export const propellantReducer = (state = 0, action) => {
 	switch (action.type) {
+	case RESTART_GAME:
+		return 0;
 	case ADD_PROPELLANT:
 		return state + action.val;
 	default:
