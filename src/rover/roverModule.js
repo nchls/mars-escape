@@ -238,7 +238,6 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 		// before we check if the rover is dead.
 		if (status !== ROVER_STATUSES.WAITING) {
 			rover.batteryCharge += getRoverSolarPanelCharge(rover, isDustStorm);
-			if (isDustStorm) {debugger}
 			if (rover.batteryCharge > batteryCapacity) {
 				rover.batteryCharge = batteryCapacity;
 			}
