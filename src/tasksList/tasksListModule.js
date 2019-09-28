@@ -10,12 +10,13 @@ const ORDER_TASKS = 'ORDER_TASKS';
 
 const PROGRESS_CONSTANT = 0.1;
 
-const initialState = Object.freeze([]);
+const initialState = Object.freeze([{ id: 999, itemId: 2 }, { id: 2, itemId: 3 }, { id: 3, itemId: 4 }]);
 
 export const cancelTask = (task) => (dispatch) => dispatch({ type: CANCEL_TASK, data: task });
 export const completeTask = (task) => (dispatch) => dispatch({ type: COMPLETE_TASK, data: task });
 export const orderTasks = (tasks) => (dispatch) => dispatch({ type: ORDER_TASKS, data: tasks });
-export const incrementTaskProgress = (taskId) => (dispatch) => dispatch({ type: INCREMENT_TASK_PROGRESS, data: taskId });
+export const incrementTaskProgress = (taskId) => (dispatch) => (
+	dispatch({ type: INCREMENT_TASK_PROGRESS, data: taskId }));
 
 const tasksListReducer = (state = initialState, { type, data }) => {
 	switch (type) {
@@ -24,6 +25,7 @@ const tasksListReducer = (state = initialState, { type, data }) => {
 	case BUILD_ITEM:
 		return [...state, data];
 	case CANCEL_TASK:
+		return [...state.filter((val) => val.id !== data.id)];
 	case COMPLETE_TASK: // @TODO we need to update the inventory, not just remove the item
 		return [...state.filter((val) => val.id !== data.id)];
 	case INCREMENT_TASK_PROGRESS: {

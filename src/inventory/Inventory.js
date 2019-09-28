@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import './inventory.scss';
 
-import itemsData from '../data/items';
+import { getItem } from '../data/items';
 
 /**
  * Group together inventory items, by their count
@@ -17,8 +17,7 @@ const groupInventory = (inventory) => {
 		if (groups[idx]) {
 			groups[idx].count += 1;
 		} else {
-			// The itemId should be one more than its index in the itemsData array
-			groups[idx] = { ...itemsData[idx - 1] };
+			groups[idx] = { ...getItem(idx) };
 			groups[idx].count = 1;
 		}
 	}

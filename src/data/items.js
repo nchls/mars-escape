@@ -179,4 +179,6 @@ const itemsData = [
 	},
 ];
 
+export const getItem = (id) => itemsData[id - 1];
+
 export default itemsData;
