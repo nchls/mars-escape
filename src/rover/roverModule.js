@@ -62,7 +62,7 @@ export const ROVER_TANK_RESOURCE_WEIGHT_MULTIPLICAND = 400;
 
 // This is fiddly. A large panel will keep a battery fully topped up at
 // ~0.000025, and will have negligable effect if we go much below 0.00001
-export const SOLAR_PANEL_BASE_CAPACITY = 0.000015;
+export const SOLAR_PANEL_BASE_CAPACITY = 0.000017;
 
 export const SOLAR_PANEL_DUST_STORM_CAPACITY_MULTIPLICAND = 0.5;
 
@@ -236,8 +236,9 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 
 		// Solar Panel stuff. We'll give the panels a chance to restore some power
 		// before we check if the rover is dead.
-		if (mode !== ROVER_MODES.WAIT) {
+		if (status !== ROVER_STATUSES.WAITING) {
 			rover.batteryCharge += getRoverSolarPanelCharge(rover, isDustStorm);
+			if (isDustStorm) {debugger}
 			if (rover.batteryCharge > batteryCapacity) {
 				rover.batteryCharge = batteryCapacity;
 			}
@@ -381,7 +382,7 @@ const initialState = Object.freeze([
 	{
 		id: uuid.new(),
 		name: secondRoverName,
-		modules: [1, 5, 7, 9, 12, 14, 17, 19],
+		modules: [1, 5, 7, 9, 12, 14, 16, 19],
 		mode: ROVER_MODES.MINE_ORE,
 		status: ROVER_STATUSES.WAITING,
 		progress: 0,
