@@ -28,7 +28,7 @@ export const saveBestTimes = (data) => (dispatch) => dispatch({ type: SAVE_BEST_
 export const bestTimesReducer = (state = initialState, { type, data }) => {
 	switch (type) {
 	case START_APP:
-		return [...getStorage()];
+		return getStorage();
 	case SAVE_BEST_TIMES: {
 		const date = new Date().toDateString();
 		const time = data / 100;

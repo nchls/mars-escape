@@ -4,7 +4,7 @@ import { saveBestTimes } from './endGameModule';
 const endGameMiddleware = (store) => (next) => (action) => {
 	const { elapsedTime, propellant } = store.getState();
 
-	if (propellant > 1 && action === END_GAME) {
+	if (propellant >= 1 && action === END_GAME) {
 		setTimeout(() => saveBestTimes(elapsedTime)(store.dispatch), 0);
 	}
 
