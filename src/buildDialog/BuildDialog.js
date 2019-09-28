@@ -31,7 +31,7 @@ const BuildAThingus = ({ isRover = false, header, buildItem, ore }) => {
 		<div>
 			<h2 className="title is-2">{header}</h2>
 			{getAllItems()
-				.filter((item) => (isRover ? item.isRover : !item.isRover))
+				.filter((item) => (isRover ? item.isRover : !item.isRover && !item.isStock))
 				// eslint-disable-next-line jsx-a11y/anchor-is-valid
 				.map((item) => <Thingus key={item.id} ore={ore} buildItem={buildItem} item={item} />)}
 		</div>
