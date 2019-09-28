@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import store from './store';
+import BuildDialog from '../buildDialog/BuildDialog';
 import GameSpeed from '../gameSpeed/GameSpeed';
 import OreCounter from '../oreCounter/OreCounter';
 import PropellantBar from '../propellantBar/PropellantBar';
