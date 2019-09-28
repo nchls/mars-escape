@@ -32,7 +32,7 @@ const tasksListReducer = (state = initialState, { type, data }) => {
 		return [...state, data];
 	case CANCEL_TASK:
 		return [...state.filter((val) => val.id !== data.id)];
-	case COMPLETE_TASK: // @TODO we need to update the inventory, not just remove the item
+	case COMPLETE_TASK:
 		return [...state.filter((val) => val.id !== data.id)];
 	case INCREMENT_TASK_PROGRESS: {
 		const index = state.findIndex((val) => val.id === data);
