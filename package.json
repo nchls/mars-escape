@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "webpack-dev-server --config webpack.config.dev.js --watch",
-    "build": "webpack --config webpack.config.prod.js"
+    "build": "webpack --config webpack.config.prod.js",
+    "lint": "./node_modules/.bin/eslint src"
   },
   "repository": {
     "type": "git",
