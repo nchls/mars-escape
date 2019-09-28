@@ -23,24 +23,28 @@ const App = () => {
 						<h1>Escape From Mars</h1>
 					</header>
 					<div className="top-controls">
-						<GameSpeed />
-						<OreCounter />
+						<div className="game-speed">
+							<GameSpeed />
+						</div>
+						<div className="ore-counter">
+							<OreCounter />
+						</div>
 					</div>
 				</div>
 				<div className="main">
-					<div className="tasks-list">
+					<div className="tasks-list boxed">
 						<TasksList />
 					</div>
-					<div className="inventory">
+					<div className="inventory boxed">
 						<Inventory />
 					</div>
-					<div className="rovers-list">
+					<div className="rovers-list boxed">
 						<RoversList />
 					</div>
-					<div className="alerts">
+					<div className="alerts boxed">
 						<AlertsList />
 					</div>
-					<div className="propellantBar">
+					<div className="propellantBar boxed">
 						<PropellantBar />
 					</div>
 				</div>
