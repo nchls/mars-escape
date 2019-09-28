@@ -35,13 +35,13 @@ const AppWrap = ({ gameOver, isBuildDialogOpen, roverDetail, isDustStorm }) => {
 						</div>
 					</div>
 					<div className="main">
-						<div className="tasks-list boxed">
+						<div className="tasks-list boxed scrollable">
 							<TasksList />
 						</div>
-						<div className="inventory boxed">
+						<div className="inventory boxed scrollable">
 							<Inventory />
 						</div>
-						<div className="rovers-list boxed">
+						<div className="rovers-list boxed scrollable">
 							<RoversList />
 						</div>
 						<div className="alerts boxed">
