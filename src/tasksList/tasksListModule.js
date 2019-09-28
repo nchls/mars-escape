@@ -12,7 +12,7 @@ const ORDER_TASKS = 'ORDER_TASKS';
 
 const PROGRESS_CONSTANT = 0.1;
 
-const initialState = Object.freeze([{ id: 999, itemId: 2 }, { id: 2, itemId: 3 }, { id: 3, itemId: 4 }]);
+const initialState = Object.freeze([]);
 
 export const makeNewTask = (item) => ({ id: shortUUID(), itemId: item.id });
 
