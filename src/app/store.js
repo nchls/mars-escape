@@ -6,17 +6,17 @@ import buildDialogReducer from '../buildDialog/buildDialogModule';
 import inventoryReducer from '../inventory/inventoryModule';
 import oreCounterReducer from '../oreCounter/oreCounterModule';
 import tasksListReducer from '../tasksList/tasksListModule';
-import { tickinsReducer, doALittleTick } from '../slowTickins/tickinsModule';
+import { gameTickReducer } from '../gameTicks/gameTicksModule';
 import { roversReducer, propellantReducer } from '../rover/roverModule';
 
 // middlewares
 import tasksListMiddleware from '../tasksList/tasksListMiddleware';
-import { tickADiddlyAMiddlewareARooni } from '../slowTickins/justForTickins';
+import { tickADiddlyAMiddlewareARooni } from '../gameTicks/tickMiddleware';
 
 const reducers = combineReducers({
 	rovers: roversReducer,
 	gameOver: gameOverReducer,
-	gameSpeed: tickinsReducer,
+	gameSpeed: gameTickReducer,
 	inventory: inventoryReducer,
 	isBuildDialogOpen: buildDialogReducer,
 	ore: oreCounterReducer,
@@ -40,6 +40,5 @@ const store = createStore(
 );
 
 store.dispatch(startApp());
-store.dispatch(doALittleTick());
 
 export default store;

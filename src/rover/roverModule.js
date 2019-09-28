@@ -1,6 +1,6 @@
 import shortUUID from 'short-uuid';
 
-import { TICK } from '../slowTickins/tickinsModule';
+import { TICK } from '../gameTicks/gameTicksModule';
 import { addOre } from '../oreCounter/oreCounterModule';
 import itemsData from '../data/items';
 

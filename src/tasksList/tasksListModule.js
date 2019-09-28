@@ -1,6 +1,6 @@
 import { RESTART_GAME } from '../app/appModule';
 import { BUILD_ITEM } from '../buildDialog/buildDialogModule';
-import { TICK } from '../slowTickins/tickinsModule';
+import { TICK } from '../gameTicks/gameTicksModule';
 
 export const CANCEL_TASK = 'CANCEL_TASK';
 
