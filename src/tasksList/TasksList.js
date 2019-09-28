@@ -5,6 +5,7 @@ import arrayMove from 'array-move';
 
 import './tasksList.scss';
 import { orderTasks, cancelTask } from './tasksListModule';
+import { openBuildDialog } from '../buildDialog/buildDialogModule';
 
 import ProgressBar from '../progressBar/ProgressBar';
 import { getItem } from '../data/items';
@@ -50,9 +51,10 @@ class TasksList extends Component {
 	}
 
 	render() {
-		const { tasks, cancelTask } = this.props;
+		const { tasks, cancelTask, openBuildDialog } = this.props;
 		return (
 			<>
+				<button className="button" onClick={openBuildDialog}>Build</button>
 				<p>Tasks list</p>
 				<TasksContainer tasks={tasks} cancelTask={cancelTask} onSortEnd={this.onSortEnd} />
 			</>
@@ -70,6 +72,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
 	orderTasks: (tasks) => orderTasks(tasks)(dispatch),
 	cancelTask: (task) => cancelTask(task)(dispatch),
+	openBuildDialog: () => openBuildDialog()(dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasksList);
