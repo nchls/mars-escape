@@ -1,9 +1,17 @@
 .rovers-list {
-	.rover {
+	.rover,
+	.rover-detail {
 		background: #ddd;
 		border-radius: 8px;
 		margin: 0 0 .5em;
 		padding: .5em;
+		border: solid 2px transparent;
+	}
+	.rover {
+		cursor: pointer;
+		&:hover {
+			border-color: #ccc;
+		}
 	}
 	.head {
 		display: flex;

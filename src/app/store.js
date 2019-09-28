@@ -9,6 +9,7 @@ import oreCounterReducer from '../oreCounter/oreCounterModule';
 import tasksListReducer from '../tasksList/tasksListModule';
 import { gameTickReducer } from '../gameTicks/gameTicksModule';
 import { roversReducer, propellantReducer } from '../rover/roverModule';
+import { roverDetailReducer } from '../roversList/roversListModule';
 
 // middlewares
 import { tickADiddlyAMiddlewareARooni } from '../gameTicks/tickMiddleware';
@@ -16,6 +17,8 @@ import tasksListMiddleware from '../tasksList/tasksListMiddleware';
 import dustStormMiddleware from '../dustStorm/dustStormMiddleware';
 
 const reducers = combineReducers({
+	rovers: roversReducer,
+	roverDetail: roverDetailReducer,
 	gameOver: gameOverReducer,
 	gameSpeed: gameTickReducer,
 	inventory: inventoryReducer,
@@ -23,7 +26,6 @@ const reducers = combineReducers({
 	isDustStorm: isDustStormReducer,
 	ore: oreCounterReducer,
 	propellant: propellantReducer,
-	rovers: roversReducer,
 	tasks: tasksListReducer,
 	timeSinceLastDustStorm: timeSinceLastDustStormReducer,
 });

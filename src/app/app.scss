@@ -1,3 +1,9 @@
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
 $top-bar-height: 2em;
 
 .top-bar {
