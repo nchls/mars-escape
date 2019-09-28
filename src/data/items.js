@@ -8,6 +8,7 @@ const itemsData = [
 		description: 'A chassis and basic parts for a small rover.',
 		cost: 200,
 		weight: 300,
+		isRover: true,
 	},
 	{
 		id: 2,
@@ -16,6 +17,7 @@ const itemsData = [
 		description: 'A chassis and basic parts for a medium-sized rover.',
 		cost: 250,
 		weight: 400,
+		isRover: true,
 	},
 	{
 		id: 3,
@@ -24,6 +26,7 @@ const itemsData = [
 		description: 'A chassis and basic parts for a large rover.',
 		cost: 300,
 		weight: 500,
+		isRover: true,
 	},
 	{
 		id: 4,
@@ -32,6 +35,7 @@ const itemsData = [
 		description: 'A chassis and basic parts for a huge rover, like seriously a heckin chonker.',
 		cost: 350,
 		weight: 600,
+		isRover: true,
 	},
 	{
 		id: 5,
@@ -179,6 +183,8 @@ const itemsData = [
 	},
 ];
 
-export const getItem = (id) => itemsData[id - 1];
+export const getItem = (id) => ({ ...itemsData[id - 1] });
+
+export const getAllItems = () => itemsData.map((item) => ({ ...item }));
 
 export default itemsData;

@@ -51,7 +51,7 @@ const AppWrap = ({ gameOver, isBuildDialogOpen, roverDetail, isDustStorm }) => {
 							<PropellantBar />
 						</div>
 					</div>
-					{ isBuildDialogOpen && <BuildDialog /> }
+					<BuildDialog isOpen={isBuildDialogOpen} />
 					{ roverDetail !== undefined && <RoverDetail /> }
 					{ isDustStorm && <DustStorm /> }
 				</>
