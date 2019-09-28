@@ -8,7 +8,7 @@ const GAME_CHILL_LEVEL_BASIS = {
 
 export const tickADiddlyAMiddlewareARooni = (store) => (next) => (action) => {
 	const gameSpeed = store.getState().gameSpeed;
-	const gameOver = store.getState().appModule;
+	const gameOver = store.getState().gameOver;
 	if (gameSpeed && !gameOver) {
 		window.setTimeout(() => store.dispatch(doALittleTick()), GAME_CHILL_LEVEL_BASIS[gameSpeed]);
 	}
