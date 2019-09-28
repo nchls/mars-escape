@@ -1,5 +1,5 @@
 import { START_APP } from '../app/appModule';
-import { nextTick, TICK } from './gameTicksModule';
+import { nextTick, TICK, CHANGE_GAME_SPEED } from './gameTicksModule';
 
 const GAME_CHILL_LEVEL_BASIS = {
 	1: 500,
@@ -8,7 +8,7 @@ const GAME_CHILL_LEVEL_BASIS = {
 };
 
 export const tickADiddlyAMiddlewareARooni = (store) => (next) => (action) => {
-	if (action.type === TICK || action.type === START_APP) {
+	if (action.type === TICK || action.type === START_APP || action.type === CHANGE_GAME_SPEED) {
 		const gameSpeed = store.getState().gameSpeed;
 		const gameOver = store.getState().gameOver;
 		if (gameSpeed && !gameOver) {

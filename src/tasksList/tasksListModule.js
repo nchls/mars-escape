@@ -1,3 +1,5 @@
+import shortUUID from 'short-uuid';
+
 import { RESTART_GAME } from '../app/appModule';
 import { BUILD_ITEM } from '../buildDialog/buildDialogModule';
 import { TICK } from '../gameTicks/gameTicksModule';
@@ -8,9 +10,11 @@ export const COMPLETE_TASK = 'COMPLETE_TASK';
 const INCREMENT_TASK_PROGRESS = 'INCREMENT_TASK_PROGRESS';
 const ORDER_TASKS = 'ORDER_TASKS';
 
-const PROGRESS_CONSTANT = 0.1;
+const PROGRESS_CONSTANT = 0.01;
 
-const initialState = Object.freeze([{ id: 999, itemId: 2 }, { id: 2, itemId: 3 }, { id: 3, itemId: 4 }]);
+const initialState = Object.freeze([]);
+
+export const makeNewTask = (item) => ({ id: shortUUID(), itemId: item.id });
 
 export const cancelTask = (task) => (dispatch) => dispatch({ type: CANCEL_TASK, data: task });
 export const completeTask = (task) => (dispatch) => dispatch({ type: COMPLETE_TASK, data: task });

@@ -10,7 +10,7 @@ const initial = 3;
 export const gameTickReducer = (store = initial, action) => {
 	switch (action.type) {
 	case CHANGE_GAME_SPEED:
-		if (action.gameSpeed >= 1 && action.gameSpeed <= 3) {
+		if (action.gameSpeed >= 0 && action.gameSpeed <= 3) {
 			return action.gameSpeed;
 		}
 		return store;
