@@ -30,9 +30,10 @@ export const bestTimesReducer = (state = initialState, { type, data }) => {
 	case START_APP:
 		return [...getStorage()];
 	case SAVE_BEST_TIMES: {
-		const sols = data / 100;
-		const bestTimes = [...state, sols]
-			.sort((a, b) => (a < b ? -1 : 1))
+		const date = new Date().toDateString();
+		const time = data / 100;
+		const bestTimes = [...state, { date, time }]
+			.sort((a, b) => (a.time < b.time ? -1 : 1))
 			.slice(0, 5);
 		return setStorage(bestTimes);
 	}
