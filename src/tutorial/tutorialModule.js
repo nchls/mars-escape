@@ -4,7 +4,7 @@ import { START_APP } from '../app/appModule';
 const SET_TUTORIAL_PROGRESS = 'SET_TUTORIAL_PROGRESS';
 const SHOW_TUTORIAL = 'SHOW_TUTORIAL';
 
-const STORAGE_KEY = 'TUTORIAL_PROGRESS';
+const STORAGE_KEY = 'tutorialProgress';
 
 const initialTutorialProgressState = 0;
 
