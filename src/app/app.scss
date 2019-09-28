@@ -17,8 +17,8 @@ $top-bar-height: 2em;
 			height: calc(100vh - #{$top-bar-height});
 		}
 		display: grid;
-		grid-template-columns: [left] 47% [right] 47% [rail] 6%;
-		grid-template-rows: [top] 45% [middle] 45% [bottom] 10%;
+		grid-template-columns: [left] 42% [right] 52% [rail] 6%;
+		grid-template-rows: [top] 48% [middle] 42% [bottom] 10%;
 	}
 
 	.tasks-list {
