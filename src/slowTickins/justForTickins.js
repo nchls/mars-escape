@@ -3,7 +3,7 @@ import { doALittleTick } from './tickinsModule';
 const GAME_CHILL_LEVEL_BASIS = {
 	1: 500,
 	2: 200,
-	3: 50
+	3: 50,
 };
 
 export const tickADiddlyAMiddlewareARooni = (store) => (next) => (action) => {
