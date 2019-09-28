@@ -1,18 +1,46 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import {ROVER_STATUSES} from '../rover/roverModule';
+
 import './alertsList.scss';
 
+const findIncapacitatedRovers = (rovers) => (
+	// TODO: Add this back when we want to start showing less alerts for Rovers
+	// rovers.filter(e =>
+	// 	e.status === ROVER_STATUSES.LOST ||
+	// 	e.status === ROVER_STATUSES.STUCK ||
+	// 	e.status === ROVER_STATUSES.OUT_OF_POWER
+	rovers
+);
 
-const AlertsList = ({ }) => {
+
+const Alert = ({ displayValue }) => (
+	<li className="alert-list-item">
+		<strong className="alert-list-value">{displayValue}</strong>
+	</li>
+);
+
+
+const AlertsList = ({ rovers, isDustStorm }) => {
+	const incapacitatedRovers = findIncapacitatedRovers(rovers);
 	return (
-		<p>Alerts list</p>
+		<div>
+			<p> Alerts List </p>
+			<ul>
+				{isDustStorm
+					&& <Alert displayValue="Dust Storm!" />
+				}
+				{incapacitatedRovers.map((rover) => <Alert key={rover.id} displayValue={`${rover.name} is ${rover.status}`} />)}
+			</ul>
+		</div>
 	);
 };
 
 const mapStateToProps = (state) => {
 	return {
-
+		rovers: state.rovers,
+		isDustStorm: state.isDustStorm,
 	};
 };
 
