@@ -4,15 +4,17 @@ import { connect } from 'react-redux';
 import './oreCounter.scss';
 
 
-const OreCounter = ({ }) => {
+const OreCounter = ({ ore }) => {
 	return (
-		<p>Ore counter</p>
+		<React.Fragment>
+			<strong>Ore:</strong> {ore}
+		</React.Fragment>
 	);
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ ore }) => {
 	return {
-
+		ore,
 	};
 };
 
