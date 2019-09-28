@@ -4,7 +4,6 @@ import { TICK } from '../gameTicks/gameTicksModule';
 import { addOre } from '../oreCounter/oreCounterModule';
 import itemsData from '../data/items';
 
-
 export const ROVER_STATUSES = {
 	WAITING: 'Waiting/charging in garage',
 	TRAVELING_ICE: 'Traveling to ice mining site',
@@ -61,6 +60,12 @@ export const ORE_LOAD_MULTIPLICAND = 100;
 
 export const ROVER_TANK_RESOURCE_WEIGHT_MULTIPLICAND = 400;
 
+// This is fiddly. A large panel will keep a battery fully topped up at
+// ~0.000025, and will have negligable effect if we go much below 0.00001
+export const SOLAR_PANEL_BASE_CAPACITY = 0.000015;
+
+export const SOLAR_PANEL_DUST_STORM_CAPACITY_MULTIPLICAND = 0.5;
+
 export const getRoverModules = (rover) => {
 	return rover.modules.map((moduleId) => itemsData.find((item) => moduleId === item.id));
 };
@@ -87,6 +92,20 @@ export const getRoverBatteryCapacity = (rover) => {
 		return val;
 	}, 0);
 	return capacity;
+};
+
+const getRoverSolarPanelCharge = (rover, isStorming) => {
+	const modules = getRoverModules(rover);
+	const chargeMultiplicand = (
+		SOLAR_PANEL_BASE_CAPACITY * (isStorming ? SOLAR_PANEL_DUST_STORM_CAPACITY_MULTIPLICAND : 1));
+	const charge = modules.reduce((accumulator, module) => {
+		let val = accumulator;
+		if (module.name.indexOf('Solar panel') !== -1) {
+			val += module.current * chargeMultiplicand;
+		}
+		return val;
+	}, 0);
+	return charge;
 };
 
 export const getRoverWeight = (rover, rovers) => {
@@ -186,7 +205,7 @@ export const getRoverName = (rovers) => {
 	return `${selectedName} ${roversWithThisNameCount + 1}`;
 };
 
-const reduceRoverTick = (rovers, dispatch) => {
+const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 	const beingRescuedInThisLoop = [];
 	const roversCopy = rovers.map((modelRover) => {
 		const rover = { ...modelRover };
@@ -213,6 +232,15 @@ const reduceRoverTick = (rovers, dispatch) => {
 
 		if (MINING_STATUSES.includes(status)) {
 			rover.batteryCharge -= ROVER_ENERGY_COSTS.MINING;
+		}
+
+		// Solar Panel stuff. We'll give the panels a chance to restore some power
+		// before we check if the rover is dead.
+		if (mode !== ROVER_MODES.WAIT) {
+			rover.batteryCharge += getRoverSolarPanelCharge(rover, isDustStorm);
+			if (rover.batteryCharge > batteryCapacity) {
+				rover.batteryCharge = batteryCapacity;
+			}
 		}
 
 		if (batteryCharge <= ROVER_ENERGY_COSTS.IDLE) {
@@ -353,7 +381,7 @@ const initialState = Object.freeze([
 	{
 		id: uuid.new(),
 		name: secondRoverName,
-		modules: [1, 5, 7, 9, 12, 14, 19],
+		modules: [1, 5, 7, 9, 12, 14, 17, 19],
 		mode: ROVER_MODES.MINE_ORE,
 		status: ROVER_STATUSES.WAITING,
 		progress: 0,
@@ -366,7 +394,7 @@ const initialState = Object.freeze([
 export const roversReducer = (state = initialState, action) => {
 	switch (action.type) {
 	case TICK:
-		return reduceRoverTick(state, action.dispatch);
+		return reduceRoverTick(state, action.dispatch, action.extraData.isDustStorm);
 	case SET_ROVER_STATUS: {
 		const newState = [...state];
 		const rover = newState.find((checkRover) => checkRover.id === action.roverId);

@@ -4,6 +4,8 @@ import { RESTART_GAME } from '../app/appModule';
 import { BUILD_ITEM } from '../buildDialog/buildDialogModule';
 import { TICK } from '../gameTicks/gameTicksModule';
 
+const uuid = shortUUID();
+
 export const CANCEL_TASK = 'CANCEL_TASK';
 
 export const COMPLETE_TASK = 'COMPLETE_TASK';
@@ -14,7 +16,7 @@ const PROGRESS_CONSTANT = 0.01;
 
 const initialState = Object.freeze([]);
 
-export const makeNewTask = (item) => ({ id: shortUUID(), itemId: item.id });
+export const makeNewTask = (item) => ({ id: uuid.new(), itemId: item.id });
 
 export const cancelTask = (task) => (dispatch) => dispatch({ type: CANCEL_TASK, data: task });
 export const completeTask = (task) => (dispatch) => dispatch({ type: COMPLETE_TASK, data: task });
