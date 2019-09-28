@@ -5,7 +5,7 @@ export const nextTick = () => ({ type: TICK });
 
 export const changeGameSpeed = (gameSpeed) => ({ type: CHANGE_GAME_SPEED, gameSpeed });
 
-const initial = 1;
+const initial = 3;
 
 export const gameTickReducer = (store = initial, action) => {
 	switch (action.type) {
