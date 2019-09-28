@@ -2,7 +2,8 @@ import { RESTART_GAME } from '../app/appModule';
 import { BUILD_ITEM } from '../buildDialog/buildDialogModule';
 import { TICK } from '../slowTickins/tickinsModule';
 
-const CANCEL_TASK = 'CANCEL_TASK';
+export const CANCEL_TASK = 'CANCEL_TASK';
+
 const COMPLETE_TASK = 'COMPLETE_TASK';
 const INCREMENT_TASK_PROGRESS = 'INCREMENT_TASK_PROGRESS';
 const ORDER_TASKS = 'ORDER_TASKS';
@@ -11,7 +12,7 @@ const PROGRESS_CONSTANT = 0.1;
 
 const initialState = Object.freeze([]);
 
-export const cancelTask = (taskId) => (dispatch) => dispatch({ type: CANCEL_TASK, data: { id: taskId } });
+export const cancelTask = (task) => (dispatch) => dispatch({ type: CANCEL_TASK, data: task });
 export const completeTask = (task) => (dispatch) => dispatch({ type: COMPLETE_TASK, data: task });
 export const orderTasks = (tasks) => (dispatch) => dispatch({ type: ORDER_TASKS, data: tasks });
 export const incrementTaskProgress = (taskId) => (dispatch) => dispatch({ type: INCREMENT_TASK_PROGRESS, data: taskId });
@@ -21,7 +22,7 @@ const tasksListReducer = (state = initialState, { type, data }) => {
 	case RESTART_GAME:
 		return [...initialState];
 	case BUILD_ITEM:
-		return [...state, data.task];
+		return [...state, data];
 	case CANCEL_TASK:
 	case COMPLETE_TASK: // @TODO we need to update the inventory, not just remove the item
 		return [...state.filter((val) => val.id !== data.id)];
