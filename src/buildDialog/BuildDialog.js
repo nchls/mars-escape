@@ -29,7 +29,7 @@ const Thingus = ({ item, buildItem, ore }) => {
 				>
 					{
 						disabled
-							? 'Not enough ore'
+							? <>Not enough ore ({item.cost}&nbsp;<i className="far fa-gem" />)</>
 							: <>Purchase ({item.cost}&nbsp;<i className="far fa-gem" />)</>
 					}
 				</button>
