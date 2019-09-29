@@ -1,7 +1,15 @@
 .rovers-list {
+	ul {
+		@media (min-width: 1300px) {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(25em, 1fr));
+			grid-gap: 0 .5em;
+		}
+	}
+
 	.rover,
 	.rover-detail {
-		background: #ddd;
+		background: #fff;
 		border-radius: 8px;
 		margin: 0 0 .5em;
 		padding: .5em;
@@ -16,6 +24,7 @@
 
 	.head {
 		display: flex;
+		padding: 0 0 .5em;
 		.title {
 			margin-bottom: .5em;
 		}
@@ -24,6 +33,13 @@
 		}
 		.rover-status {
 			margin-left: auto;
+			position: relative;
+			padding: 0 0 8px;
+			.progress-outer {
+				position: absolute;
+				left: 0;
+				bottom: 0;
+			}
 		}
 	}
 
@@ -33,6 +49,33 @@
 
 	.rover-detail .head {
 		justify-content: space-between;
+	}
+
+	.rover-summary {
+		display: flex;
+		flex-align: flex-start;
+		.rover-image {
+			padding: 0 1em 0 0;
+			width: 130px;
+			height: 90px;
+			.rover-module-image-wrapper {
+				margin: 0;
+				border: 0;
+			}
+		}
+	}
+
+	.rover-battery,
+	.rover-tanks {
+		text-align: center;
+		padding: 0 1em;
+		.progress-outer {
+			height: 80px;
+			width: 8px;
+		}
+		i {
+			display: block;
+		}
 	}
 
 	.rover-name {
@@ -51,6 +94,11 @@
 	}
 
 	.title.mode-header {
+		margin-bottom: .5em;
+	}
+
+	.title.task-queue-header {
+		margin-top: 1em;
 		margin-bottom: .5em;
 	}
 

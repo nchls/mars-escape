@@ -163,6 +163,13 @@ const RoversList = ({
 	const [isNameEditOpen, setIsNameEditOpen] = useState(false);
 	const [inputName, setInputName] = useState('');
 
+	const progressStatuses = [
+		ROVER_STATUSES.TRAVELING_ORE,
+		ROVER_STATUSES.TRAVELING_ICE,
+		ROVER_STATUSES.RETURNING,
+		ROVER_STATUSES.TOWING,
+	];
+
 	return (
 		<>
 			<h2 className="title is-5">Rovers</h2>
@@ -177,12 +184,27 @@ const RoversList = ({
 							<li key={rover.id} className="rover" onClick={() => openRoverDetail(rover.id)}>
 								<div className="head">
 									<h3 className="title is-6 rover-name">{ rover.name }</h3>
-									{ rover.mode === ROVER_MODES.WAIT && <i className="far fa-pause-circle" /> }
-									{ rover.mode === ROVER_MODES.MINE_ICE && <i className="fas fa-cube" /> }
-									{ rover.mode === ROVER_MODES.MINE_ORE && <i className="far fa-gem" /> }
-									{ rover.mode === ROVER_MODES.RESCUE && <i className="fas fa-ambulance" /> }
+									{ rover.mode === ROVER_MODES.WAIT && (
+										<i className="far fa-pause-circle" title="Job: Wait" />
+									) }
+									{ rover.mode === ROVER_MODES.MINE_ICE && (
+										<i className="fas fa-cube" title="Job: Mining ice" />
+									) }
+									{ rover.mode === ROVER_MODES.MINE_ORE && (
+										<i className="far fa-gem" title="Job: Mining ore" />
+									) }
+									{ rover.mode === ROVER_MODES.RESCUE && (
+										<i className="fas fa-ambulance" title="Job: Rescue" />
+									) }
 									<div className="rover-status">
 										{ getRoverStatusDisplay(rover, rovers) }
+										{ progressStatuses.includes(rover.status) && (
+											<ProgressBar
+												color="red"
+												id={`${rover.id}-progress`}
+												progress={progress}
+											/>
+										) }
 									</div>
 								</div>
 								{ [ROVER_MODES.MINE_ICE, ROVER_MODES.MINE_ORE].includes(rover.mode)
@@ -203,29 +225,31 @@ const RoversList = ({
 										This rover has no winch installed and cannot rescue rovers!
 									</RoverWarning>
 								) }
-								<div className="rover-progress">
-									Progress: <ProgressBar
-										color="red"
-										id={`${rover.id}-progress`}
-										progress={progress}
-									/>
-								</div>
-								<div className="rover-battery">
-									Battery charge: <ProgressBar
-										color="yellow"
-										id={`${rover.id}-battery`}
-										progress={battery}
-									/>
-								</div>
-								{ modules.find((module) => module.name.indexOf('Tanks') !== -1) !== undefined && (
-									<div className="rover-tanks">
-										Tanks load: <ProgressBar
-											color="blue"
-											id={`${rover.id}-tanks`}
-											progress={tanksLoad}
-										/>
+								<div className="rover-summary">
+									<div className="rover-image">
+										<RoverModuleImage modules={modules} status={rover.status} />
 									</div>
-								) }
+									<div className="rover-battery" title="Battery charge">
+										<ProgressBar
+											color="yellow"
+											isVertical
+											id={`${rover.id}-battery`}
+											progress={battery}
+										/>
+										<i className="fas fa-car-battery" />
+									</div>
+									{ modules.find((module) => module.name.indexOf('Tanks') !== -1) !== undefined && (
+										<div className="rover-tanks" title="Tanks load">
+											<ProgressBar
+												color="blue"
+												isVertical
+												id={`${rover.id}-tanks`}
+												progress={tanksLoad}
+											/>
+											<i className="fas fa-box-open" />
+										</div>
+									) }
+								</div>
 							</li>
 						);
 					}
@@ -308,16 +332,18 @@ const RoversList = ({
 								</button>
 							</div>
 
-							<h4 className="title is-6 task-queue-header">Queued Jobs</h4>
-							<div className="task-queue">
-								<div className="field">
-									{ rover.taskQueue && rover.taskQueue.map((task) => {
-										return (
-											<p key={task.taskId}>{task.description}</p>
-										);
-									}) }
+							{ rover.taskQueue && <>
+								<h4 className="title is-6 task-queue-header">Queued Jobs</h4>
+								<div className="task-queue">
+									<div className="field">
+										{ rover.taskQueue && rover.taskQueue.map((task) => {
+											return (
+												<p key={task.taskId}>{task.description}</p>
+											);
+										}) }
+									</div>
 								</div>
-							</div>
+							</> }
 
 							<h4 className="title is-6 modules-header">Modules</h4>
 							<div className="modules-configurator">

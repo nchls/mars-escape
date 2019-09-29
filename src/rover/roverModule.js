@@ -451,7 +451,6 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			setTimeout(() => setRoverStatus(rescuingId, ROVER_STATUSES.WAITING)(dispatch), 1);
 		}
 
-		
 
 		return rover;
 	});
