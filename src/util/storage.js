@@ -9,7 +9,7 @@ export const setStorage = (key) => (undefinedValue) => (data) => {
 
 export const getStorage = (key) => (undefinedValue) => () => {
 	try {
-		return JSON.parse(window.localStorage.getItem(key));
+		return JSON.parse(window.localStorage.getItem(key)) || undefinedValue;
 	} catch (e) {
 		return undefinedValue;
 	}
