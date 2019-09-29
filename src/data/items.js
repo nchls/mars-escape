@@ -160,7 +160,7 @@ const itemsData = [
 	{
 		id: 19,
 		name: 'Tanks (basic)',
-		description: 'Some small, light tanks for storing low volumes of ice, ore, or notes from a chick.',
+		description: 'Some small, light tanks for storing low volumes of ice, ore, or tiny Martian artifacts.',
 		cost: 100,
 		weight: 100,
 		capacity: 1,
