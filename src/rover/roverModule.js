@@ -213,6 +213,7 @@ export const getRoverStatusDisplay = (rover, rovers) => {
 		return rover.status;
 	}
 	const rescuingRover = rovers.find((checkRover) => checkRover.id === rover.rescuingId);
+	if (!rescuingRover) { return ''; };
 	if (rover.status === ROVER_STATUSES.TRAVELING_RESCUE) {
 		return `Traveling to incapacitated ${rescuingRover.name}`;
 	}
@@ -302,6 +303,10 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 		const batteryCapacity = getRoverBatteryCapacity(rover);
 		const drivingSpeed = getRoverDrivingSpeed(rover, rovers);
 		const workRandomness = (Math.random() * WORK_RANDOMNESS) + (1 - (WORK_RANDOMNESS / 2));
+		const setRoverStatusHelper = (roverId, status) => {
+			rover.status = status;
+			setTimeout(() => setRoverStatus(roverId, status)(dispatch), 1);
+		};
 
 		rover.batteryCharge -= ROVER_ENERGY_COSTS.IDLE;
 
@@ -338,7 +343,7 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 				rover.rescuingId = undefined;
 			}
 			if (![ROVER_STATUSES.WAIT, ROVER_STATUSES.TOWED, ROVER_STATUSES.FALLEN_OFF_CLIFF].includes(rover.status)) {
-				rover.status = ROVER_STATUSES.OUT_OF_POWER;
+				setRoverStatusHelper(rover.id, ROVER_STATUSES.OUT_OF_POWER);
 				rover.tanksLoad = 0;
 				rover.progress = 0;
 			}
@@ -353,11 +358,11 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 
 				if (mode === ROVER_MODES.MINE_ICE) {
 					if (getRoverCanMine(rover)) {
-						rover.status = ROVER_STATUSES.TRAVELING_ICE;
+						setRoverStatusHelper(rover.id, ROVER_STATUSES.TRAVELING_ICE);
 					}
 				} else if (mode === ROVER_MODES.MINE_ORE) {
 					if (getRoverCanMine(rover)) {
-						rover.status = ROVER_STATUSES.TRAVELING_ORE;
+						setRoverStatusHelper(rover.id, ROVER_STATUSES.TRAVELING_ORE);
 					}
 				} else if (mode === ROVER_MODES.RESCUE) {
 					if (getRoverCanRescue(rover)) {
@@ -378,7 +383,7 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 						if (roversNeedingRescue.length) {
 							rover.rescuingId = roversNeedingRescue[0].id;
 							beingRescuedInThisLoop.push(rover.rescuingId);
-							rover.status = ROVER_STATUSES.TRAVELING_RESCUE;
+							setRoverStatusHelper(rover.id, ROVER_STATUSES.TRAVELING_RESCUE);
 						}
 					}
 				}
@@ -390,13 +395,13 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			if (progress >= 1) {
 				rover.progress = 0;
 				if (mode === ROVER_MODES.MINE_ICE) {
-					rover.status = ROVER_STATUSES.MINING_ICE;
+					setRoverStatusHelper(rover.id, ROVER_STATUSES.MINING_ICE);
 				}
 				if (mode === ROVER_MODES.MINE_ORE) {
-					rover.status = ROVER_STATUSES.MINING_ORE;
+					setRoverStatusHelper(rover.id, ROVER_STATUSES.MINING_ORE);
 				}
 				if (mode === ROVER_MODES.RESCUE) {
-					rover.status = ROVER_STATUSES.TOWING;
+					setRoverStatusHelper(rover.id, ROVER_STATUSES.TOWING);
 					setTimeout(() => setRoverStatus(rescuingId, ROVER_STATUSES.TOWED)(dispatch), 1);
 				}
 			}
@@ -406,12 +411,12 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			const awareness = getRoverAwareness(rover, isDustStorm);
 
 			if ((Math.random() * (1 / STUCK_IN_SAND_RISK)) < (1 / awareness)) {
-				rover.status = ROVER_STATUSES.STUCK;
+				setRoverStatusHelper(rover.id, ROVER_STATUSES.STUCK);
 				rover.tanksLoad = 0;
 				rover.progress = 0;
 			}
 			if ((Math.random() * (1 / FALLEN_OFF_CLIFF_RISK)) < (1 / awareness)) {
-				rover.status = ROVER_STATUSES.FALLEN_OFF_CLIFF;
+				setRoverStatusHelper(rover.id, ROVER_STATUSES.FALLEN_OFF_CLIFF);
 				rover.tanksLoad = 0;
 				rover.progress = 0;
 			}
@@ -424,7 +429,7 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			rover.tanksLoad += miningSpeed * workRandomness;
 			if (tanksLoad > tanksCapacity) {
 				rover.tanksLoad = tanksCapacity;
-				rover.status = ROVER_STATUSES.RETURNING;
+				setRoverStatusHelper(rover.id, ROVER_STATUSES.RETURNING);
 			}
 		}
 
@@ -441,16 +446,15 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			}
 			rover.tanksLoad = 0;
 			rover.progress = 0;
-			rover.status = ROVER_STATUSES.WAITING;
+			setRoverStatusHelper(rover.id, ROVER_STATUSES.WAITING);
 		}
 
 		if (status === ROVER_STATUSES.TOWING && progress >= 1) {
 			rover.progress = 0;
 			rover.rescuingId = undefined;
-			rover.status = ROVER_STATUSES.WAITING;
+			setRoverStatusHelper(rover.id, ROVER_STATUSES.WAITING);
 			setTimeout(() => setRoverStatus(rescuingId, ROVER_STATUSES.WAITING)(dispatch), 1);
 		}
-
 
 		return rover;
 	});
@@ -500,12 +504,37 @@ export const installModule = (rover, moduleId) => (dispatch) => dispatch({
 });
 
 export const ENQUEUE_TASK = 'ENQUEUE_TASK';
+/**
+ * Enqueue a task. This will add the task to the specified rover's task queue. The task will be run
+ * when the rover transitions to the specified status.
+ * @param {string} roverId ID of the rover which will have this task added to its queue
+ * @param {string} taskId Unique ID for this task. This is partially used to identify and prevent
+ * 		dupicate tasks from being added to the queue, so choose your taskId carefully
+ * @param {Function} fn Function to be called when the task is worked.
+ * @param {Array<*>} args Functions passed to the task function
+ * @param {string} description Description of the task. Will be displayed in the job queue in RoverList
+ * @param {string} enqueuingMessage Message to (optionally) be toastShown when the task is enqueued
+ * @param {string} dequeuingMessage Message to (optionally) be toastShown when the task is dequeued
+ * @param {boolean} showNotification Whether to toastShow notifications when the task is enqueued/dequeued
+ * @param {boolean} executeOnStatus When the rover transitions into this status, the task will be executed
+ */
 export const enqueueTask = (
-	(roverId, taskId, fn, args, description, enqueuingMessage, dequeuingMessage, showNotification = false) => (
+	(
+		roverId,
+		taskId,
+		fn,
+		args,
+		description,
+		enqueuingMessage,
+		dequeuingMessage,
+		showNotification = false,
+		executeOnStatus = ROVER_STATUSES.WAITING,
+	) => (
 		(dispatch) => dispatch({
 			type: ENQUEUE_TASK,
 			roverId,
 			taskId,
+			executeOnStatus,
 			task: {
 				fn,
 				args,
@@ -515,6 +544,7 @@ export const enqueueTask = (
 				roverId,
 				showNotification,
 				taskId,
+				executeOnStatus,
 			},
 		})));
 
@@ -588,22 +618,21 @@ export const roversReducer = (state = initialState, action) => {
 		const newState = [...state];
 		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
 		rover.status = action.status;
-		// Transition back to garage
-		if (action.status === ROVER_STATUSES.WAITING) {
-			// look out!
-			const dequeueTasks = (taskQueue) => {
-				if (taskQueue.length) {
-					const nextTask = taskQueue.shift();
-					if (nextTask.showNotification && nextTask.dequeuingMessage) {
-						showToast(nextTask.dequeuingMessage, { isSuccess: true });
-					}
-					nextTask.fn(...nextTask.args);
-					setTimeout(() => dequeueTasks(taskQueue), 2);
+		// look out!
+		const dequeueTasks = (taskQueue) => {
+			if (taskQueue.length) {
+				const nextTask = taskQueue.shift();
+				if (nextTask.showNotification && nextTask.dequeuingMessage) {
+					showToast(nextTask.dequeuingMessage, { isSuccess: true });
 				}
-			};
-			if (rover.taskQueue && rover.taskQueue.length) {
-				setTimeout(() => dequeueTasks(rover.taskQueue), 2);
+				nextTask.fn(...nextTask.args);
+				setTimeout(() => dequeueTasks(taskQueue), 2);
 			}
+		};
+		if (rover.taskQueue && rover.taskQueue.length) {
+			const tasksToRun = rover.taskQueue.filter((task) => action.status === task.executeOnStatus);
+			rover.taskQueue = rover.taskQueue.filter((task) => action.status !== task.executeOnStatus);
+			setTimeout(() => dequeueTasks(tasksToRun), 2);
 		}
 		return newState;
 	}
