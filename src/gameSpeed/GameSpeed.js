@@ -32,7 +32,7 @@ const GameSpeed = ({ gameSpeed, changeGameSpeed }) => {
 			<button
 				className={`button is-small${gameSpeed === 3 ? ' is-primary' : ' is-light'}`}
 				onClick={() => changeGameSpeed(3)}
-				title="Relativistic speed"
+				title="Ludicrous speed"
 			>
 				<i className="fas fa-fast-forward" />
 			</button>

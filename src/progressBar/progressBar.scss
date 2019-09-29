@@ -1,3 +1,5 @@
+@import "~bulma/bulma";
+
 $column-size: 1%;
 
 @mixin progress-tick-x {
@@ -49,21 +51,17 @@ $column-size: 1%;
 }
 
 .progress-green {
-	background-color: green;
+	background-color: $green;
 }
 
 .progress-blue {
-	background-color: blue;
+	background-color: $blue;
 }
 
 .progress-red {
-	background-color: red;
+	background-color: $red;
 }
 
 .progress-yellow {
-	background-color: yellow;
-}
-
-.progress-aliceblue {
-	background-color: aliceblue;
+	background-color: $yellow;
 }

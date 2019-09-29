@@ -23,7 +23,7 @@ const Task = SortableElement(({ task, cancelTask }) => {
 			{item.name}
 			<ProgressBar
 				aria-label="Task progress"
-				color="aliceblue"
+				color="green"
 				id={item.id}
 				isVertical={false}
 				progress={progress}
