@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import AppWrap from './AppWrap';
 import store from './store';
 
+// Just a goof
 
 const App = () => {
 	return (
