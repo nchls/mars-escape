@@ -14,11 +14,11 @@ const endGameMiddleware = (store) => (next) => (action) => {
 	if (!gameOver && ore < 350) {
 		const { length } = rovers;
 		const disabledRovers = rovers.filter(({ status }) => [LOST, STUCK, OUT_OF_POWER, FALLEN_OFF_CLIFF].includes(status));
-		if (length === disabledRovers.length && tasks.length === 0) {
+		if (tasks.length === 0) {
 			const sellCost = inventory.filter((item) => item.cost && item.itemId !== 22).reduce((acc, item) => acc + Math.floor(item.cost / 2), 0);
 			const hasWinch = inventory.find((item) => item.itemId === 22) ? 150 : 0;
 			const finalOre = sellCost + hasWinch + ore;
-			if (finalOre < 350) {
+			if ((length === disabledRovers.length && finalOre < 350) || finalOre < 150) {
 				setTimeout(() => store.dispatch(endGame()), 0);
 			}
 		}
