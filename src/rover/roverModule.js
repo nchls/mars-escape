@@ -65,6 +65,8 @@ export const ROVER_TANK_RESOURCE_WEIGHT_MULTIPLICAND = 400;
 
 export const STUCK_IN_SAND_RISK = 0.002;
 
+export const LOST_RISK = 0.001;
+
 export const FALLEN_OFF_CLIFF_RISK = 0.0001;
 
 // This is fiddly. A large panel will keep a battery fully topped up at
@@ -415,6 +417,11 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 				rover.tanksLoad = 0;
 				rover.progress = 0;
 			}
+			if ((Math.random() * (1 / LOST_RISK)) < (1 / awareness)) {
+				setRoverStatusHelper(rover.id, ROVER_STATUSES.LOST);
+				rover.tanksLoad = 0;
+				rover.progress = 0;
+			}
 			if ((Math.random() * (1 / FALLEN_OFF_CLIFF_RISK)) < (1 / awareness)) {
 				setRoverStatusHelper(rover.id, ROVER_STATUSES.FALLEN_OFF_CLIFF);
 				rover.tanksLoad = 0;
@@ -553,6 +560,12 @@ export const ADD_MODULE_TO_INVENTORY = 'ADD_MODULE_TO_INVENTORY';
 export const addModuleToInventory = (module) => (dispatch) => dispatch({
 	type: ADD_MODULE_TO_INVENTORY,
 	module: module,
+});
+
+export const FORGET_ROVER = 'FORGET_ROVER';
+export const forgetRover = (roverId) => (dispatch) => dispatch({
+	type: FORGET_ROVER,
+	roverId: roverId,
 });
 
 
@@ -738,6 +751,12 @@ export const roversReducer = (state = initialState, action) => {
 			});
 		}
 
+		return newState;
+	}
+	case FORGET_ROVER: {
+		const newState = [...state];
+		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
+		rover.forgotten = true;
 		return newState;
 	}
 	default:
