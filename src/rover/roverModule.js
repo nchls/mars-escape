@@ -515,6 +515,7 @@ export const enqueueTask = (
 				dequeuingMessage,
 				roverId,
 				showNotification,
+				taskId,
 			},
 		})));
 
