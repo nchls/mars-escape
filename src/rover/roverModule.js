@@ -619,20 +619,22 @@ export const roversReducer = (state = initialState, action) => {
 		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
 		rover.status = action.status;
 		// look out!
-		const dequeueTasks = (taskQueue) => {
-			if (taskQueue.length) {
-				const nextTask = taskQueue.shift();
-				if (nextTask.showNotification && nextTask.dequeuingMessage) {
-					showToast(nextTask.dequeuingMessage, { isSuccess: true });
+		const executeTasks = (taskQueue) => {
+			for (let i = 0; i < taskQueue.length; i++) {
+				const nextTask = taskQueue[i];
+				if (nextTask.executeOnStatus === action.status) {
+					taskQueue.splice(i, 1);
+					if (nextTask.showNotification && nextTask.dequeuingMessage) {
+						showToast(nextTask.dequeuingMessage, { isSuccess: true });
+					}
+					setTimeout(() => nextTask.fn(...nextTask.args), 2);
+					setTimeout(() => executeTasks(taskQueue), 2);
+					return;
 				}
-				nextTask.fn(...nextTask.args);
-				setTimeout(() => dequeueTasks(taskQueue), 2);
 			}
 		};
 		if (rover.taskQueue && rover.taskQueue.length) {
-			const tasksToRun = rover.taskQueue.filter((task) => action.status === task.executeOnStatus);
-			rover.taskQueue = rover.taskQueue.filter((task) => action.status !== task.executeOnStatus);
-			setTimeout(() => dequeueTasks(tasksToRun), 2);
+			setTimeout(() => executeTasks(rover.taskQueue), 2);
 		}
 		return newState;
 	}

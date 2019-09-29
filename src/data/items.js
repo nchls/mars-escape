@@ -142,7 +142,7 @@ const itemsData = [
 		id: 15,
 		name: 'Drill (advanced)',
 		description: 'A big, state-of-the-art drill with all the latest drilly features.',
-		image: 'img-drill-basic',
+		image: 'img-drill-advanced',
 		cost: 350,
 		weight: 180,
 		effectiveness: 400,
