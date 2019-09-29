@@ -57,7 +57,7 @@ export const ROVER_DRIVING_SPEED_MULTIPLICAND = 0.0004;
 
 export const ROVER_MINING_SPEED_MULTIPLICAND = 0.0004;
 
-export const PROPELLANT_LOAD_MULTIPLICAND = 0.01;
+export const PROPELLANT_LOAD_MULTIPLICAND = 1;
 
 export const ORE_LOAD_MULTIPLICAND = 100;
 
@@ -601,10 +601,10 @@ const initialState = Object.freeze([
 	},
 ]);
 
-export const roversReducer = (state = initialState, action) => {
+export const roversReducer = (state = [...initialState], action) => {
 	switch (action.type) {
 	case RESTART_GAME:
-		return initialState;
+		return [...initialState];
 	case COMPLETE_TASK: {
 		const { itemId } = action.data;
 		if ([1, 2, 3, 4].includes(itemId)) {
