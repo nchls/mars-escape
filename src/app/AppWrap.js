@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import BuildDialog from '../buildDialog/BuildDialog';
 import GameSpeed from '../gameSpeed/GameSpeed';
@@ -19,6 +21,7 @@ import './app.scss';
 const AppWrap = ({ gameOver, isBuildDialogOpen, isDustStorm }) => {
 	return (
 		<div className="app">
+			<ToastContainer />
 			{ !gameOver ? (
 				<>
 					<div className="top-bar">

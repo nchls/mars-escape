@@ -1,3 +1,5 @@
+@import "~bulma/bulma";
+
 *,
 *:before,
 *:after {
@@ -84,4 +86,19 @@ html {
 		grid-row-start: top;
 		grid-row-end: none;
 	}
+}
+
+.toast {
+    font-weight: bold;
+    font-size: 1.5em;
+    color: black;
+    &-success {
+        background-color: $success;
+    }
+    &-warning {
+        background-color: $warning;
+    }
+    &-failure {
+        background-color: $danger;
+    }
 }

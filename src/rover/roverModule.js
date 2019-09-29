@@ -4,6 +4,7 @@ import { TICK } from '../gameTicks/gameTicksModule';
 import { COMPLETE_TASK } from '../tasksList/tasksListModule';
 import { addOre } from '../oreCounter/oreCounterModule';
 import itemsData from '../data/items';
+import { showToast } from '../toast/showToast';
 
 
 export const ROVER_STATUSES = {
@@ -591,7 +592,8 @@ export const roversReducer = (state = initialState, action) => {
 
 		// Remove parts that are replaced by this one
 		if (module.replaces) {
-			const replacedModules = rover.modules.filter((checkModuleId) => module.replaces.indexOf(checkModuleId) !== -1);
+			const replacedModules = rover.modules.filter((checkModuleId) => (
+				module.replaces.indexOf(checkModuleId) !== -1));
 			rover.modules = rover.modules.filter((checkModuleId) => module.replaces.indexOf(checkModuleId) === -1);
 
 			// Tell the inventory about the parts that were removed
@@ -620,6 +622,7 @@ export const propellantReducer = (state = 0, action) => {
 	case RESTART_GAME:
 		return 0;
 	case ADD_PROPELLANT:
+		showToast(`${action.val} propellant added!`, { isSuccess: true });
 		return state + action.val;
 	default:
 		return state;
