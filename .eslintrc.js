@@ -48,5 +48,6 @@ module.exports = {
 		'no-debugger': 0,
 		'import/prefer-default-export': 0,
 		'consistent-return': 0,
+		'no-plusplus': 0,
 	}
 };

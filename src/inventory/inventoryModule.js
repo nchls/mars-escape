@@ -6,16 +6,7 @@ import itemsData from '../data/items';
 
 const REMOVE_ITEM_FROM_INVENTORY = 'REMOVE_ITEM_FROM_INVENTORY';
 
-const initialState = Object.freeze(itemsData.reduce((accumulator, item) => {
-	if (!item.isStock) {
-		accumulator.push({
-			id: `${Math.random()}`,
-			itemId: item.id,
-			cost: item.cost,
-		});
-	}
-	return accumulator;
-}, []));
+const initialState = Object.freeze([]);
 
 export const removeItemFromInventory = (moduleId) => ({ type: REMOVE_ITEM_FROM_INVENTORY, moduleId });
 
