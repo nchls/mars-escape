@@ -213,7 +213,7 @@ export const getRoverStatusDisplay = (rover, rovers) => {
 		return rover.status;
 	}
 	const rescuingRover = rovers.find((checkRover) => checkRover.id === rover.rescuingId);
-	if (!rescuingRover) { return '' };
+	if (!rescuingRover) { return ''; };
 	if (rover.status === ROVER_STATUSES.TRAVELING_RESCUE) {
 		return `Traveling to incapacitated ${rescuingRover.name}`;
 	}
@@ -567,7 +567,7 @@ const initialState = Object.freeze([
 	{
 		id: uuid.new(),
 		name: firstRoverName,
-		modules: Object.freeze([4, 5, 7, 9, 12, 15, 20]),
+		modules: Object.freeze([1, 5, 7, 9, 12, 14, 19]),
 		mode: ROVER_MODES.WAIT,
 		status: ROVER_STATUSES.WAITING,
 		progress: 0,
@@ -578,7 +578,7 @@ const initialState = Object.freeze([
 	{
 		id: uuid.new(),
 		name: secondRoverName,
-		modules: Object.freeze([1, 5, 7, 9, 12, 14, 19, 22]),
+		modules: Object.freeze([1, 5, 7, 9, 12, 14, 19]),
 		mode: ROVER_MODES.WAIT,
 		status: ROVER_STATUSES.WAITING,
 		progress: 0,
