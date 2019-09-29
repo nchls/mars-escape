@@ -471,7 +471,7 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 
 
 export const ADD_PROPELLANT = 'ADD_PROPELLANT';
-export const addPropellant = (propellant) => (dispatch) => dispatch({ type: ADD_PROPELLANT, val: propellant * 100 });
+export const addPropellant = (propellant) => (dispatch) => dispatch({ type: ADD_PROPELLANT, val: propellant });
 
 export const SET_ROVER_STATUS = 'SET_ROVER_STATUS';
 export const setRoverStatus = (roverId, status) => (dispatch) => {
