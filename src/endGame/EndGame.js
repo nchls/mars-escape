@@ -39,7 +39,7 @@ const EndGame = ({ elapsedTime, bestTimes, propellant, startApp, restartGame }) 
 										bestTimes.map(({ date, time }, index) => (
 											<tr key={index}>
 												<td className="endGame-date">{date}</td>
-												<td className="endGame-time">{time}</td>
+												<td className="endGame-time">{convertTicksToSols(time)}</td>
 											</tr>
 										))
 									}
