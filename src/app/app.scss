@@ -14,10 +14,12 @@ html {
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+	height: 100vh;
 }
 
 body {
 	background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(255,255,255,0.0) 20%,rgba(255,255,255,0.0) 80%,rgba(0,0,0,0.8) 100%);
+	height: 100vh;
 }
 
 .app-title h1.title,
