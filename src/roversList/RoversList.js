@@ -101,7 +101,7 @@ const RoverModuleImage = ({ modules }) => (
 			modules
 				.filter((module) => module.image)
 				.map(({ image, name }) => (
-					<img key={name} className="rover-module-img" src={image} onError={function imageError() { this.src = `dist/${image}`; }} alt={name} />
+					<div key={name} className={`rover-module-img ${image}`} role="presentation" />
 				))
 		}
 	</div>

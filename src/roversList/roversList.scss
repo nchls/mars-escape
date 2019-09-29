@@ -108,5 +108,85 @@
 		top: 0;
 		pointer-events: none;
 		left: 0;
+		width: 100%;
+		height: 100%;
+		background-repeat: no-repeat;
+		background-size: contain;
+
+		&.img-rover-small {
+			background-image: url(../images/rover-small.png);
+		}
+
+		&.img-rover-medium {
+			background-image: url(../images/rover-medium.png);
+		}
+
+		&.img-rover-large {
+			background-image: url(../images/rover-large.png);
+		}
+
+		&.img-rover-huge {
+			background-image: url(../images/rover-huge.png);
+		}
+
+		&.img-wheels-basic {
+			background-image: url(../images/wheels-basic.png);
+		}
+
+		&.img-wheels-advanced {
+			background-image: url(../images/wheels-advanced.png);
+		}
+
+		&.img-battery-small {
+			background-image: url(../images/battery-small.png);
+		}
+
+		&.img-battery-medium {
+			background-image: url(../images/battery-medium.png);
+		}
+
+		&.img-battery-large {
+			background-image: url(../images/battery-large.png);
+		}
+
+		&.img-compass {
+			background-image: url(../images/compass.png);
+		}
+
+		&.img-gps {
+			background-image: url(../images/gps.png);
+		}
+
+		&.img-drill-basic {
+			background-image: url(../images/drill-basic.png);
+		}
+
+		&.img-solar-small {
+			background-image: url(../images/solar-small.png);
+		}
+
+		&.img-solar-large {
+			background-image: url(../images/solar-large.png);
+		}
+
+		&.img-solar-array {
+			background-image: url(../images/solar-array.png);
+		}
+
+		&.img-tank-basic {
+			background-image: url(../images/tank-basic.png);
+		}
+
+		&.img-tank-large {
+			background-image: url(../images/tank-large.png);
+		}
+
+		&.img-camera {
+			background-image: url(../images/camera.png);
+		}
+
+		&.winch {
+			background-image: url(../images/winch.png);
+		}
 	}
 }
