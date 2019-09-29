@@ -2,9 +2,9 @@ import { START_APP } from '../app/appModule';
 import { nextTick, TICK, CHANGE_GAME_SPEED } from './gameTicksModule';
 
 const GAME_CHILL_LEVEL_BASIS = {
-	1: 500,
-	2: 200,
-	3: 50,
+	1: 400,
+	2: 150,
+	3: 40,
 };
 
 export const tickADiddlyAMiddlewareARooni = (store) => (next) => (action) => {
