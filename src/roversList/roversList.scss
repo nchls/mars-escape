@@ -238,7 +238,7 @@
 }
 .rover-module-image-drilling {
     .img-drill-basic, .img-drill-advanced {
-        transform: rotate(45deg) translate(-4%, -8%);
+        transform: rotate(45deg) translate(-3.5%, -7.5%);
         transition: transform 1.3s ease;
     }
 }
@@ -267,6 +267,10 @@
 
 		&.img-rover-bg-stuck {
 			background-image: url(../images/rover-bg-stuck.png);
+		}
+
+		&.img-rover-bg-garage {
+			background-image: url(../images/rover-bg-garage.png);
 		}
 
 		&.img-rover-bg {

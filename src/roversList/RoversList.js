@@ -121,17 +121,19 @@ const RoverModuleImage = ({ modules, status }) => {
 		|| status === ROVER_STATUSES.TRAVELING_RESCUE
 		|| status === ROVER_STATUSES.TOWING
 		|| status === ROVER_STATUSES.TOWED
-		|| status === ROVER_STATUSES.LOST;
+		|| status === ROVER_STATUSES.LOST
+		|| status === ROVER_STATUSES.RETURNING;
 	const isDrilling = status === ROVER_STATUSES.MINING_ICE || status === ROVER_STATUSES.MINING_ORE;
 
 	return (
 		<div className={`rover-module-image-wrapper ${isMoving ? 'rover-module-image-moving' : 'rover-module-image-not-moving'} ${isDrilling ? 'rover-module-image-drilling' : 'rover-module-image-not-drilling'}`}>
 			{
-				isMoving
+				isMoving // eslint-disable-line no-nested-ternary
 					? (<div className="rover-module-img img-rover-bg" role="presentation" />)
-					: (<div className="rover-module-img img-rover-bg-still" role="presentation" />)
+					: status === ROVER_STATUSES.WAITING
+						? (<div className="rover-module-img img-rover-bg-garage" role="presentation" />)
+						: (<div className="rover-module-img img-rover-bg-still" role="presentation" />)
 			}
-
 			{
 				status !== ROVER_STATUSES.FALLEN_OFF_CLIFF
 					? modules
