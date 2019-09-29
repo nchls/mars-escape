@@ -20,14 +20,13 @@ const Alert = ({ displayValue }) => (
 const AlertsList = ({ rovers, isDustStorm }) => {
 	const incapacitatedRovers = findIncapacitatedRovers(rovers);
 	return (
-		<>
-			<p>Alerts List</p>
-			<ul className="alert-list">
-				{isDustStorm
-					&& <Alert displayValue="Dust Storm!" />}
-				{incapacitatedRovers.map((rover) => <Alert key={rover.id} displayValue={`${rover.name} is ${rover.status}`} />)}
-			</ul>
-		</>
+		<ul className="alert-list">
+			{isDustStorm
+				&& <Alert displayValue="Dust Storm!" />}
+			{incapacitatedRovers.map((rover) => (
+				<Alert key={rover.id} displayValue={`${rover.name} is ${rover.status}`} />
+			))}
+		</ul>
 	);
 };
 

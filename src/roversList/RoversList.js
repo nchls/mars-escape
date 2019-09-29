@@ -26,7 +26,6 @@ import {
 } from './roversListModule';
 import itemsData from '../data/items';
 
-
 const RoverWarning = ({ children }) => {
 	return (
 		<div className="rover-tanks-warning">
@@ -114,6 +113,18 @@ const AvailableModule = ({ rover, module, installationDisabled, installModule, e
 		</button>
 	);
 };
+
+const RoverModuleImage = ({ modules }) => (
+	<div className="rover-module-image-wrapper">
+		{
+			modules
+				.filter((module) => module.image)
+				.map(({ image, name }) => (
+					<div key={name} className={`rover-module-img ${image}`} role="presentation" />
+				))
+		}
+	</div>
+);
 
 const RoversList = ({
 	rovers,
@@ -342,6 +353,9 @@ const RoversList = ({
 							<div className="stat">
 								<span className="key">Top Speed: </span>
 								<span className="value">{ Math.floor(getRoverDrivingSpeed(rover, rovers) * 250) }kph</span>
+							</div>
+							<div className="rover-image">
+								<RoverModuleImage modules={modules} />
 							</div>
 
 							<div className="buttons is-right">

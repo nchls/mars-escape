@@ -8,18 +8,22 @@ const STORAGE_KEY = 'tutorialProgress';
 
 const initialTutorialProgressState = 0;
 
-const saveTutorialState = setStorage(STORAGE_KEY)(initialTutorialProgressState);
+const setTutorialState = setStorage(STORAGE_KEY)(initialTutorialProgressState);
 const getTutorialState = getStorage(STORAGE_KEY)(initialTutorialProgressState);
 
-export const setTutorialProgress = (progressId) => (dispatch) => (
-	dispatch({ type: SET_TUTORIAL_PROGRESS, data: { progressId } }));
+export const setTutorialProgress = (progressId) => (dispatch) => {
+	dispatch({ type: SET_TUTORIAL_PROGRESS, data: { progressId } });
+};
 
 export const tutorialProgressReducer = (state = initialTutorialProgressState, { type, data }) => {
 	switch (type) {
 	case START_APP:
 		return getTutorialState();
 	case SET_TUTORIAL_PROGRESS:
-		return saveTutorialState(data.progressId);
+		if (data.progressId === 99) {
+			setTutorialState(99);
+		}
+		return data.progressId;
 	default:
 		return state;
 	}
