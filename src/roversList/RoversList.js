@@ -121,7 +121,8 @@ const RoverModuleImage = ({ modules, status }) => {
 		|| status === ROVER_STATUSES.TRAVELING_RESCUE
 		|| status === ROVER_STATUSES.TOWING
 		|| status === ROVER_STATUSES.TOWED
-		|| status === ROVER_STATUSES.LOST;
+		|| status === ROVER_STATUSES.LOST
+		|| status === ROVER_STATUSES.RETURNING;
 	const isDrilling = status === ROVER_STATUSES.MINING_ICE || status === ROVER_STATUSES.MINING_ORE;
 
 	return (
