@@ -43,6 +43,10 @@ body {
 
 .app-title {
 	padding-top: .2em;
+
+	h1 {
+		text-shadow: 2px 2px 3px rgba(0,0,0,0.5);
+	}
 }
 
 .over-storm {
@@ -82,10 +86,6 @@ body {
 
 	> div {
 		flex-grow: 1;
-	}
-
-	.elapsed-time {
-		width: 5em;
 	}
 }
 

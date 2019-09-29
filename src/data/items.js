@@ -104,7 +104,7 @@ const itemsData = [
 		image: 'img-battery-large',
 		cost: 500,
 		weight: 200,
-		capacity: 6,
+		capacity: 5,
 		minSize: 3,
 		replaces: [9, 10],
 	},
