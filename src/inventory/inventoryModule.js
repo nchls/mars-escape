@@ -5,16 +5,7 @@ import { INSTALL_MODULE, UNINSTALL_MODULE, ADD_MODULE_TO_INVENTORY } from '../ro
 import itemsData from '../data/items';
 
 
-const initialState = Object.freeze(itemsData.reduce((accumulator, item) => {
-	if (!item.isStock) {
-		accumulator.push({
-			id: `${Math.random()}`,
-			itemId: item.id,
-			cost: item.cost,
-		});
-	}
-	return accumulator;
-}, []));
+const initialState = Object.freeze([]);
 
 const inventoryReducer = (state = initialState, action) => {
 	switch (action.type) {
