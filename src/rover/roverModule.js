@@ -601,10 +601,10 @@ const initialState = Object.freeze([
 	},
 ]);
 
-export const roversReducer = (state = initialState, action) => {
+export const roversReducer = (state = [...initialState], action) => {
 	switch (action.type) {
 	case RESTART_GAME:
-		return initialState;
+		return [...initialState];
 	case COMPLETE_TASK: {
 		const { itemId } = action.data;
 		if ([1, 2, 3, 4].includes(itemId)) {
