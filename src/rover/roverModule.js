@@ -213,6 +213,7 @@ export const getRoverStatusDisplay = (rover, rovers) => {
 		return rover.status;
 	}
 	const rescuingRover = rovers.find((checkRover) => checkRover.id === rover.rescuingId);
+	if (!rescuingRover) { return '' };
 	if (rover.status === ROVER_STATUSES.TRAVELING_RESCUE) {
 		return `Traveling to incapacitated ${rescuingRover.name}`;
 	}
@@ -336,7 +337,7 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 
 		if (status !== ROVER_STATUSES.WAITING && batteryCharge <= ROVER_ENERGY_COSTS.IDLE) {
 			rover.batteryCharge = 0;
-			if (newStatus === ROVER_STATUSES.TOWING) {
+			if (rover.status === ROVER_STATUSES.TOWING) {
 				const droppedId = rover.rescuingId;
 				setTimeout(() => setRoverStatus(droppedId, ROVER_STATUSES.LOST)(dispatch), 1);
 				rover.rescuingId = undefined;
@@ -452,6 +453,7 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			rover.progress = 0;
 			rover.rescuingId = undefined;
 			setRoverStatusHelper(rover.id, ROVER_STATUSES.WAITING);
+			setTimeout(() => setRoverStatus(rescuingId, ROVER_STATUSES.WAITING)(dispatch), 1);
 		}
 
 		return rover;
@@ -565,7 +567,7 @@ const initialState = Object.freeze([
 	{
 		id: uuid.new(),
 		name: firstRoverName,
-		modules: Object.freeze([1, 5, 7, 9, 12, 14, 19]),
+		modules: Object.freeze([4, 5, 7, 9, 12, 15, 20]),
 		mode: ROVER_MODES.WAIT,
 		status: ROVER_STATUSES.WAITING,
 		progress: 0,
@@ -576,7 +578,7 @@ const initialState = Object.freeze([
 	{
 		id: uuid.new(),
 		name: secondRoverName,
-		modules: Object.freeze([1, 5, 7, 9, 12, 14, 19]),
+		modules: Object.freeze([1, 5, 7, 9, 12, 14, 19, 22]),
 		mode: ROVER_MODES.WAIT,
 		status: ROVER_STATUSES.WAITING,
 		progress: 0,
