@@ -19,17 +19,28 @@ html {
 }
 
 .top-bar {
-	height: $top-bar-height;
-	display: flex;
-	justify-content: space-between;
+	margin: 0.5em;
+
+	header {
+		width: 100%;
+		@media (min-width: 800px) {
+			width: 40%;
+			display: inline-block;
+		}
+	}
+
+	.top-controls-wrap {
+		width: 100%;
+		display: inline-block;
+		@media (min-width: 800px) {
+			width: 60%;
+		}
+	}
 }
 
 .top-controls {
 	display: flex;
-	width: 100%;
-	@media (min-width: 800px) {
-		width: 60%;
-	}
+
 	> div {
 		flex-grow: 1;
 	}

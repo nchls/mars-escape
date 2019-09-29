@@ -25,15 +25,17 @@ const AppWrap = ({ gameOver, isBuildDialogOpen, isDustStorm }) => {
 						<header className="app-title">
 							<h1 className="title over-storm">Escape From Mars</h1>
 						</header>
-						<div className="top-controls">
-							<div className="game-speed over-storm">
-								<GameSpeed />
-							</div>
-							<div className="elapsed-time over-storm">
-								<ElapsedTime />
-							</div>
-							<div className="ore-counter over-storm">
-								<OreCounter />
+						<div className="top-controls-wrap">
+							<div className="top-controls">
+								<div className="elapsed-time over-storm">
+									<ElapsedTime />
+								</div>
+								<div className="ore-counter over-storm">
+									<OreCounter />
+								</div>
+								<div className="game-speed over-storm">
+									<GameSpeed />
+								</div>
 							</div>
 						</div>
 					</div>
