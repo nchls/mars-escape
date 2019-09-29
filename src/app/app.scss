@@ -17,6 +17,7 @@ html {
 }
 
 .over-storm {
+	position: relative;
 	z-index: 2;
 }
 
@@ -62,6 +63,7 @@ html {
 		grid-template-columns: [left] 42% [right] 52% [rail] 6%;
 		grid-template-rows: [top] 48% [middle] 42% [bottom] 10%;
 	}
+
 
 	.tasks-list {
 		grid-column-start: left;
