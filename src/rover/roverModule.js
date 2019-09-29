@@ -65,7 +65,7 @@ export const ROVER_TANK_RESOURCE_WEIGHT_MULTIPLICAND = 400;
 
 export const STUCK_IN_SAND_RISK = 0.002;
 
-export const FALLEN_OFF_CLIFF_RISK = 0.0006;
+export const FALLEN_OFF_CLIFF_RISK = 0.0001;
 
 // This is fiddly. A large panel will keep a battery fully topped up at
 // ~0.000025, and will have negligable effect if we go much below 0.00001
@@ -82,6 +82,18 @@ export const getRoverMotorsPowerDraw = (rover) => {
 	const powerDraw = modules.reduce((accumulator, module) => {
 		let val = accumulator;
 		if (module.name.indexOf('Motors') !== -1) {
+			val += module.powerDraw;
+		}
+		return val;
+	}, 0);
+	return powerDraw;
+};
+
+export const getRoverDrillPowerDraw = (rover) => {
+	const modules = getRoverModules(rover);
+	const powerDraw = modules.reduce((accumulator, module) => {
+		let val = accumulator;
+		if (module.name.indexOf('Drill') !== -1) {
 			val += module.powerDraw;
 		}
 		return val;
@@ -107,7 +119,7 @@ const getRoverSolarPanelCharge = (rover, isStorming) => {
 		SOLAR_PANEL_BASE_CAPACITY * (isStorming ? SOLAR_PANEL_DUST_STORM_CAPACITY_MULTIPLICAND : 1));
 	const charge = modules.reduce((accumulator, module) => {
 		let val = accumulator;
-		if (module.name.indexOf('Solar panel') !== -1) {
+		if (module.name.indexOf('Solar') !== -1) {
 			val += module.current * chargeMultiplicand;
 		}
 		return val;
@@ -300,7 +312,9 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 		}
 
 		if (MINING_STATUSES.includes(status)) {
-			rover.batteryCharge -= ROVER_ENERGY_COSTS.MINING;
+			const drillPowerDraw = getRoverDrillPowerDraw(rover);
+			const miningCost = ROVER_ENERGY_COSTS.MINING * drillPowerDraw;
+			rover.batteryCharge -= miningCost;
 		}
 
 		// Solar Panel and RTG stuff. We'll give the power sources a chance to restore some power
@@ -513,7 +527,7 @@ const initialState = Object.freeze([
 	{
 		id: uuid.new(),
 		name: secondRoverName,
-		modules: [1, 5, 7, 9, 12, 14, 19],
+		modules: [4, 6, 7, 10, 12, 15, 19, 18],
 		mode: ROVER_MODES.WAIT,
 		status: ROVER_STATUSES.WAITING,
 		progress: 0,
@@ -622,7 +636,7 @@ export const propellantReducer = (state = 0, action) => {
 	case RESTART_GAME:
 		return 0;
 	case ADD_PROPELLANT:
-		showToast(`${action.val} propellant added!`, { isSuccess: true });
+		showToast(`${action.val * 100}% propellant added!`, { isSuccess: true });
 		return state + action.val;
 	default:
 		return state;
