@@ -342,7 +342,7 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 				setTimeout(() => setRoverStatus(droppedId, ROVER_STATUSES.LOST)(dispatch), 1);
 				rover.rescuingId = undefined;
 			}
-			if (![ROVER_STATUSES.WAIT, ROVER_STATUSES.TOWED, ROVER_STATUSES.FALLEN_OFF_CLIFF].includes(rover.status)) {
+			if (![ROVER_STATUSES.WAIT, ROVER_STATUSES.TOWED, ROVER_STATUSES.FALLEN_OFF_CLIFF, ROVER_STATUSES.OUT_OF_POWER].includes(rover.status)) {
 				setRoverStatusHelper(rover.id, ROVER_STATUSES.OUT_OF_POWER);
 				rover.tanksLoad = 0;
 				rover.progress = 0;
@@ -649,7 +649,7 @@ export const roversReducer = (state = initialState, action) => {
 				enqueueTask(
 					rover.id,
 					taskId,
-					(...args) => setRoverMode(...args)(action.dispatch),
+					(roverId, name) => setRoverMode(roverId, name, false)(action.dispatch),
 					[rover.id, action.mode],
 					`Changing mode: ${action.mode}`,
 					`Queueing mode change: ${action.mode}`,
