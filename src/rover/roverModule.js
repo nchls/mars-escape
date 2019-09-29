@@ -651,8 +651,8 @@ export const roversReducer = (state = initialState, action) => {
 					taskId,
 					(roverId, name) => setRoverMode(roverId, name, false)(action.dispatch),
 					[rover.id, action.mode],
-					`Changing mode: ${action.mode}`,
-					`Queueing mode change: ${action.mode}`,
+					`Change job: ${action.mode}`,
+					`Queueing job change: ${action.mode}`,
 					`Mode changed: ${action.mode}`,
 					true, // showNotification
 				)(action.dispatch)), 1);
