@@ -13,23 +13,41 @@ const endGameMiddleware = (store) => (next) => (action) => {
 
 	if (!gameOver && ore < 350) {
 		const { length } = rovers;
-		const stuckRovers = rovers.filter(({ status }) => [STUCK, OUT_OF_POWER, LOST].includes(status));
-		const disabledRovers = rovers.filter(({ status }) => [FALLEN_OFF_CLIFF].includes(status));
-		if (tasks.length === 0) {
-			const sellCost = inventory
+		const stuckRovers = rovers.filter(({ status }) => [STUCK, OUT_OF_POWER, LOST, FALLEN_OFF_CLIFF].includes(status)); // All the rovers who are stuck
+		if (tasks.length === 0) { // We don't have any tasks running
+			const sellCost = inventory // We get the value of everything in our inventory
 				.filter((item) => item.cost && item.itemId !== 22)
 				.reduce((acc, item) => acc + Math.floor(item.cost / 2), 0);
-			const hasWinch = inventory.find((item) => item.itemId === 22) ? 150 : 0;
-			const finalOre = sellCost + hasWinch + ore;
-			if (
-				(length === disabledRovers.length)
-				|| (length === (disabledRovers.length + stuckRovers.length) && finalOre < 350)
-				|| finalOre < 150
-			) {
-				const functioningRoversWithWinches = rovers
-					.filter(({ modules, status }) => ![STUCK, OUT_OF_POWER, LOST, FALLEN_OFF_CLIFF].includes(status) && modules.includes(22));
+			const finalOre = sellCost + ore;
 
-				if (functioningRoversWithWinches.length === 0) {
+			if (length === stuckRovers.length || finalOre < 300) { // All rovers are broken and we can't bulid new ones
+				const itemsInInventory = inventory.map((item) => item.itemId);
+
+				const functioningRovers = rovers // Then we check the rovers
+					.filter(({ modules, status }) => (
+						![STUCK, OUT_OF_POWER, LOST, FALLEN_OFF_CLIFF].includes(status) // All rovers who are working
+						&& (
+							(modules.includes(22) || itemsInInventory.includes(22) || finalOre >= 150) // If the rovers have a winch or one is inventory
+							|| (
+								(
+									modules.includes(14)
+									|| modules.includes(15)
+									|| itemsInInventory.includes(14)
+									|| itemsInInventory.includes(15)
+									|| finalOre >= 100
+								) // If the rovers have a drill or one is in inventory
+								&& (
+									modules.includes(19)
+									|| modules.includes(20)
+									|| itemsInInventory.includes(19)
+									|| itemsInInventory.includes(20)
+									|| finalOre >= 100
+								) // And the rovers have a tank or one is in inventory
+							)
+						)
+					));
+
+				if (functioningRovers.length === 0) {
 					setTimeout(() => store.dispatch(endGame()), 0);
 				}
 			}
