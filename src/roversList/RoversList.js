@@ -94,7 +94,7 @@ const AvailableModule = ({ rover, module, installationDisabled, installModule, e
 							taskId,
 							installModule,
 							[rover, module.id],
-							`Installing module: ${module.name}`,
+							`Install module: ${module.name}`,
 							`Queueing module install: ${module.name}`,
 							`Module installed: ${module.name}`,
 							true, // showNotifications
@@ -429,7 +429,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		openRoverDetail: (id) => openRoverDetail(id)(dispatch),
 		closeRoverDetail: () => closeRoverDetail()(dispatch),
-		setRoverMode: (roverId, mode) => setRoverMode(roverId, mode)(dispatch),
+		setRoverMode: (roverId, mode) => setRoverMode(roverId, mode, true)(dispatch),
 		setRoverName: (roverId, name) => setRoverName(roverId, name)(dispatch),
 		uninstallModule: (roverId, moduleId) => uninstallModule(roverId, moduleId)(dispatch),
 		installModule: (rover, moduleId) => installModule(rover, moduleId)(dispatch),

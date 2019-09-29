@@ -36,7 +36,7 @@ body {
 }
 
 .app-title {
-	margin-top: .2em;
+	padding-top: .2em;
 }
 
 .over-storm {
@@ -45,7 +45,12 @@ body {
 }
 
 .top-bar {
-	height: $top-bar-height;
+	min-height: $top-bar-height;
+	height: auto;
+	@media (min-width: 800px) {
+		min-height: none;
+		height: $top-bar-height;
+	}
 	padding: 0 0.5em;
 
 	header {
