@@ -1,6 +1,6 @@
 import { toggleDustStorm } from './dustStormModule';
 
-const NO_DUST_STORM_MULTIPLIER = 0.01;
+const NO_DUST_STORM_MULTIPLIER = 0.005;
 const IS_DUST_STORM_MULTIPLIER = 0.15;
 
 const dustStormMiddleware = (store) => (next) => (action) => {

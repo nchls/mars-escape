@@ -530,7 +530,7 @@ export const roversReducer = (state = initialState, action) => {
 					mode: ROVER_MODES.WAIT,
 					status: ROVER_STATUSES.WAITING,
 					progress: 0,
-					batterChage: 1,
+					batteryCharge: 1,
 					tanksLoad: 0,
 					rescuingId: undefined,
 				},
