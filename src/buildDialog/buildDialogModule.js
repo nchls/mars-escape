@@ -6,15 +6,15 @@ const OPEN_BUILD_DIALOG = 'OPEN_BUILD_DIALOG';
 
 export const buildItem = (cost, task) => (dispatch) => dispatch({ type: BUILD_ITEM, data: { ...task, cost } });
 export const closeBuildDialog = () => (dispatch) => dispatch({ type: CLOSE_BUILD_DIALOG });
-export const openBuildDialog = () => (dispatch) => dispatch({ type: OPEN_BUILD_DIALOG });
+export const openBuildDialog = (buildType) => (dispatch) => dispatch({ type: OPEN_BUILD_DIALOG, buildType: buildType });
 
-const buildModuleReducer = (state = false, { type }) => {
+const buildModuleReducer = (state = false, { type, buildType }) => {
 	switch (type) {
 	case RESTART_GAME:
 	case CLOSE_BUILD_DIALOG:
 		return false;
 	case OPEN_BUILD_DIALOG:
-		return true;
+		return buildType;
 	default:
 		return state;
 	}

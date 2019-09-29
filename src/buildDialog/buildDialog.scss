@@ -1,0 +1,16 @@
+.build-item {
+	display: flex;
+	padding: 0 0 1.3em;
+	.item-name {
+		font-weight: bold;
+	}
+	.left {
+		width: 65%;
+	}
+	.right {
+		width: 35%;
+	}
+	.right {
+		text-align: right;
+	}
+}

@@ -16,28 +16,42 @@ const sizeLabels = {
 const Thingus = ({ item, buildItem, ore }) => {
 	const disabled = item.cost > ore;
 	return (
-		<div className="box" href="#">
-			<h3 className="title is-3">{item.name}</h3>
-			Description: {item.description}<br />
-			Cost: {item.cost} ore<br />
-			Weight: {Math.floor(item.weight / 8)}kg<br />
-			{ item.minSize && <>Minimum rover size: {sizeLabels[item.minSize]}<br /></> }
-			<button
-				disabled={disabled}
-				onClick={() => buildItem(item.cost, makeNewTask(item))}
-				className="button"
-			>
-				{disabled ? 'We Require More Minerals' : 'Purchase'}
-			</button>
+		<div className="build-item">
+			<div className="left">
+				<div className="item-name">{item.name}</div>
+				<div className="item-description">{item.description}</div>
+			</div>
+			<div className="right">
+				<button
+					disabled={disabled}
+					onClick={() => buildItem(item.cost, makeNewTask(item))}
+					className="button is-primary"
+				>
+					{
+						disabled
+							? 'Not enough ore'
+							: <>Purchase ({item.cost}&nbsp;<i className="far fa-gem" />)</>
+					}
+				</button>
+				<div className="item-weight kv">
+					<span className="key">Weight:&nbsp;</span>
+					<span className="value">{Math.floor(item.weight / 8)}kg</span>
+				</div>
+				{ item.minSize && (
+					<div className="item-minsize">
+						<span className="key">Min. rover size:&nbsp;</span>
+						<span className="value">{sizeLabels[item.minSize]}</span>
+					</div>
+				) }
+			</div>
 		</div>
 	);
 };
 
-const BuildAThingus = ({ isRover = false, header, buildItem, ore }) => {
+const BuildAThingus = ({ isRover = false, buildItem, ore }) => {
 	return (
 		// eslint-disable-next-line jsx-a11y/anchor-is-valid
 		<div>
-			<h2 className="title is-2">{header}</h2>
 			{getAllItems()
 				.filter((item) => (isRover ? item.isRover : !item.isRover && !item.isStock))
 				// eslint-disable-next-line jsx-a11y/anchor-is-valid
@@ -46,19 +60,18 @@ const BuildAThingus = ({ isRover = false, header, buildItem, ore }) => {
 	);
 };
 
-const BuildDialog = ({ isOpen, closeBuildDialog, buildItem, ore }) => {
-	const modalClass = `modal${isOpen ? ' is-active' : ''}`;
+const BuildDialog = ({ buildType, closeBuildDialog, buildItem, ore }) => {
+	const modalClass = `modal${buildType !== false ? ' is-active' : ''}`;
 	return (
 		<div className={modalClass}>
-			<div className="modal-background" />
+			<div className="modal-background" onClick={closeBuildDialog} />
 			<div className="modal-card">
 				<header className="modal-card-head">
-					<p className="modal-card-title">Build Something</p>
+					<p className="modal-card-title">Build a {buildType === 'rover' ? 'Rover' : 'Module'}</p>
 					<button onClick={closeBuildDialog} className="delete" aria-label="close">Close</button>
 				</header>
 				<section className="modal-card-body">
-					<BuildAThingus ore={ore} buildItem={buildItem} isRover header="Rovers" />
-					<BuildAThingus ore={ore} buildItem={buildItem} header="Modules" />
+					<BuildAThingus ore={ore} buildItem={buildItem} isRover={buildType === 'rover'} />
 				</section>
 			</div>
 		</div>

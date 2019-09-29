@@ -342,15 +342,15 @@ const RoversList = ({
 							</div>
 
 							<h4 className="title is-6 stats-header">Stats</h4>
-							<div className="stat">
+							<div className="stat kv">
 								<span className="key">Chassis: </span>
 								<span className="value">{ getRoverSize(rover) }</span>
 							</div>
-							<div className="stat">
+							<div className="stat kv">
 								<span className="key">Weight: </span>
 								<span className="value">{ Math.floor(getRoverWeight(rover, rovers) / 8) }kg</span>
 							</div>
-							<div className="stat">
+							<div className="stat kv">
 								<span className="key">Top Speed: </span>
 								<span className="value">{ Math.floor(getRoverDrivingSpeed(rover, rovers) * 250) }kph</span>
 							</div>

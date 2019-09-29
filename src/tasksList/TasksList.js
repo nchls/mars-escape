@@ -54,9 +54,12 @@ class TasksList extends Component {
 		const { tasks, cancelTask, openBuildDialog } = this.props;
 		return (
 			<>
-				<button className="button" onClick={openBuildDialog}>Build</button>
-				<p>Tasks list</p>
+				<h2 className="title is-5">Tasks</h2>
 				<TasksContainer tasks={tasks} cancelTask={cancelTask} onSortEnd={this.onSortEnd} />
+				<div className="buttons is-right">
+					<button className="button is-primary" onClick={() => openBuildDialog('rover')}>Build Rover</button>
+					<button className="button is-primary" onClick={() => openBuildDialog('module')}>Build Module</button>
+				</div>
 			</>
 		);
 	}
@@ -72,7 +75,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
 	orderTasks: (tasks) => orderTasks(tasks)(dispatch),
 	cancelTask: (task) => cancelTask(task)(dispatch),
-	openBuildDialog: () => openBuildDialog()(dispatch),
+	openBuildDialog: (buildType) => openBuildDialog(buildType)(dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasksList);

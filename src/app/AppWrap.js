@@ -65,7 +65,7 @@ const AppWrap = ({ gameOver, isBuildDialogOpen, isDustStorm, tutorialProgress })
 							<PropellantBar />
 						</div>
 					</div>
-					<BuildDialog isOpen={isBuildDialogOpen} />
+					<BuildDialog buildType={isBuildDialogOpen} />
 					{ isDustStorm && <DustStorm /> }
 				</>
 			) : (
