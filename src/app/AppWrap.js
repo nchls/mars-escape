@@ -19,7 +19,7 @@ import Tutorial from '../tutorial/Tutorial';
 import './app.scss';
 
 
-const AppWrap = ({ gameOver, isBuildDialogOpen, isDustStorm, tutorialProgress }) => {
+const AppWrap = ({ gameOver, isBuildDialogOpen, isDustStorm, tutorialProgress, propellant }) => {
 	return (
 		<div className="app">
 			<ToastContainer />
@@ -61,7 +61,7 @@ const AppWrap = ({ gameOver, isBuildDialogOpen, isDustStorm, tutorialProgress })
 						<div className="alerts boxed over-storm">
 							<AlertsList />
 						</div>
-						<div className="propellantBar boxed over-storm">
+						<div className={`propellantBar boxed over-storm${propellant >= 1 ? ' launch-ready' : ''}`}>
 							<PropellantBar />
 						</div>
 					</div>
@@ -81,6 +81,7 @@ const mapStateToProps = (state) => {
 		isBuildDialogOpen: state.isBuildDialogOpen,
 		isDustStorm: state.isDustStorm,
 		tutorialProgress: state.tutorialProgress,
+		propellant: state.propellant,
 	};
 };
 

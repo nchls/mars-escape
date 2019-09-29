@@ -128,11 +128,12 @@ const RoverModuleImage = ({ modules, status }) => {
 	return (
 		<div className={`rover-module-image-wrapper ${isMoving ? 'rover-module-image-moving' : 'rover-module-image-not-moving'} ${isDrilling ? 'rover-module-image-drilling' : 'rover-module-image-not-drilling'}`}>
 			{
-				isMoving
+				isMoving // eslint-disable-line no-nested-ternary
 					? (<div className="rover-module-img img-rover-bg" role="presentation" />)
-					: (<div className="rover-module-img img-rover-bg-still" role="presentation" />)
+					: status === ROVER_STATUSES.WAITING
+						? (<div className="rover-module-img img-rover-bg-garage" role="presentation" />)
+						: (<div className="rover-module-img img-rover-bg-still" role="presentation" />)
 			}
-
 			{
 				status !== ROVER_STATUSES.FALLEN_OFF_CLIFF
 					? modules

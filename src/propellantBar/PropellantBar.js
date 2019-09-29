@@ -11,7 +11,7 @@ const PropellantBar = ({ endGame, propellant }) => {
 	return propellant < 1
 		? (
 			<>
-				<h2 className="propellantBar-label" aria-label="Propellant">Prop.</h2>
+				<h2 className="propellantBar-label">Propellant</h2>
 				<p className="propellantBar-percent">{asPercentage}%</p>
 				<ProgressBar
 					aria-label={`Propellant: ${asPercentage}%`}
