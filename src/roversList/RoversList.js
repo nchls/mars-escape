@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import ProgressBar from '../progressBar/ProgressBar';
 
@@ -9,8 +9,11 @@ import {
 	getRoverStatusDisplay,
 	getRoverBatteryCapacity,
 	getRoverTanksCapacity,
+	getRoverWeight,
+	getRoverDrivingSpeed,
 	getRoverModules,
 	setRoverMode,
+	setRoverName,
 	uninstallModule,
 	installModule,
 } from '../rover/roverModule';
@@ -99,9 +102,13 @@ const RoversList = ({
 	openRoverDetail,
 	closeRoverDetail,
 	setRoverMode,
+	setRoverName,
 	uninstallModule,
 	installModule,
 }) => {
+	const [isNameEditOpen, setIsNameEditOpen] = useState(false);
+	const [inputName, setInputName] = useState('');
+
 	return (
 		<>
 			<h2 className="title is-5">Rovers</h2>
@@ -175,7 +182,46 @@ const RoversList = ({
 					return (
 						<li key={rover.id} className="rover-detail">
 							<div className="head">
-								<h3 className="title is-6 rover-name">{ rover.name }</h3>
+								{ !isNameEditOpen ? (
+									<>
+										<h3
+											className="title is-6 rover-name"
+											onClick={() => {
+												setInputName(rover.name);
+												setIsNameEditOpen(true);
+											}}
+										>
+											{ rover.name }
+											<i className="fas fa-pencil-alt" />
+										</h3>
+										<div className="buttons is-right">
+											<button className="button is-primary" onClick={closeRoverDetail}>Done</button>
+										</div>
+									</>
+								) : (
+									<input
+										type="text"
+										className="input"
+										value={inputName}
+										autoFocus
+										maxLength="18"
+										onChange={(e) => setInputName(e.target.value)}
+										onBlur={() => {
+											if (inputName.trim() !== '') {
+												setRoverName(rover.id, inputName);
+											}
+											setIsNameEditOpen(false);
+										}}
+										onKeyDown={(e) => {
+											if (e.key === 'Enter') {
+												if (inputName.trim() !== '') {
+													setRoverName(rover.id, inputName);
+												}
+												setIsNameEditOpen(false);
+											}
+										}}
+									/>
+								) }
 							</div>
 
 							<h4 className="title is-6 mode-header">Job</h4>
@@ -259,6 +305,16 @@ const RoversList = ({
 								</div>
 							</div>
 
+							<h4 className="title is-6 stats-header">Stats</h4>
+							<div className="stat">
+								<span className="key">Weight: </span>
+								<span className="value">{ Math.floor(getRoverWeight(rover, rovers) / 8) }kg</span>
+							</div>
+							<div className="stat">
+								<span className="key">Top Speed: </span>
+								<span className="value">{ Math.floor(getRoverDrivingSpeed(rover, rovers) * 250) }kph</span>
+							</div>
+
 							<div className="buttons is-right">
 								<button className="button is-primary" onClick={closeRoverDetail}>Done</button>
 							</div>
@@ -283,6 +339,7 @@ const mapDispatchToProps = (dispatch) => {
 		openRoverDetail: (id) => openRoverDetail(id)(dispatch),
 		closeRoverDetail: () => closeRoverDetail()(dispatch),
 		setRoverMode: (roverId, mode) => setRoverMode(roverId, mode)(dispatch),
+		setRoverName: (roverId, name) => setRoverName(roverId, name)(dispatch),
 		uninstallModule: (roverId, moduleId) => uninstallModule(roverId, moduleId)(dispatch),
 		installModule: (rover, moduleId) => installModule(rover, moduleId)(dispatch),
 	};

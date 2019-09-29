@@ -13,18 +13,41 @@
 			border-color: #ccc;
 		}
 	}
+
 	.head {
 		display: flex;
-		justify-content: flex-start;
 		.title {
 			margin-bottom: .5em;
 		}
 		[class*="fa-"] {
-			padding: 0 .8em;
+			padding: 0 .6em;
 		}
 		.rover-status {
 			margin-left: auto;
 		}
+	}
+
+	.rover .head {
+		justify-content: flex-start;
+	}
+
+	.rover-detail .head {
+		justify-content: space-between;
+	}
+
+	.rover-name {
+		[class*="fa-"] {
+			visibility: hidden;
+		}
+		&:hover {
+			[class*="fa-"] {
+				visibility: visible;
+			}
+		}
+	}
+
+	.rover-detail .head .title {
+		cursor: pointer;
 	}
 
 	.title.mode-header {
@@ -56,6 +79,18 @@
 		}
 		.installed-modules .button {
 			justify-content: flex-start;
+		}
+	}
+
+	.title.stats-header {
+		margin: 1em 0 .5em;
+	}
+
+	.stat {
+		display: inline-block;
+		padding: 0 2em 0 0;
+		.value {
+			font-weight: bold;
 		}
 	}
 }

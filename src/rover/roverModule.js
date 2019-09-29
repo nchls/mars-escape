@@ -369,6 +369,13 @@ export const setRoverMode = (roverId, mode) => (dispatch) => dispatch({
 	mode: mode,
 });
 
+export const SET_ROVER_NAME = 'SET_ROVER_NAME';
+export const setRoverName = (roverId, name) => (dispatch) => dispatch({
+	type: SET_ROVER_NAME,
+	roverId: roverId,
+	name: name,
+});
+
 export const UNINSTALL_MODULE = 'UNINSTALL_MODULE';
 export const uninstallModule = (roverId, moduleId) => (dispatch) => dispatch({
 	type: UNINSTALL_MODULE,
@@ -439,6 +446,12 @@ export const roversReducer = (state = initialState, action) => {
 		rover.mode = action.mode;
 		return newState;
 	}
+	case SET_ROVER_NAME: {
+		const newState = [...state];
+		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
+		rover.name = action.name;
+		return newState;
+	}
 	case UNINSTALL_MODULE: {
 		const newState = [...state];
 		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
@@ -456,10 +469,13 @@ export const roversReducer = (state = initialState, action) => {
 	case INSTALL_MODULE: {
 		const newState = [...state];
 		const rover = newState.find((checkRover) => checkRover.id === action.rover.id);
+		const module = itemsData.find((checkItem) => checkItem.id === action.moduleId);
 		rover.modules.push(action.moduleId);
+		if (module.name.indexOf('Battery') !== -1) {
+			rover.batteryCharge = 0.1;
+		}
 
 		// Remove parts that are replaced by this one
-		const module = itemsData.find((checkItem) => checkItem.id === action.moduleId);
 		if (module.replaces) {
 			const replacedModules = rover.modules.filter((checkModuleId) => module.replaces.indexOf(checkModuleId) !== -1);
 			rover.modules = rover.modules.filter((checkModuleId) => module.replaces.indexOf(checkModuleId) === -1);
