@@ -15,7 +15,7 @@ const EndGame = ({ bestTimes, propellant, startApp, restartGame }) => {
 						</div>
 					)
 					: (
-						<div className="notification is-success endGame-failure">
+						<div className="notification is-danger endGame-failure">
 							You've run out of rovers and won't be able to make it home.  You can wait for a slow death, or hop in your time machine and try again.
 						</div>
 					)
