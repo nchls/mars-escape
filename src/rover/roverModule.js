@@ -525,7 +525,7 @@ export const roversReducer = (state = initialState, action) => {
 				...state,
 				{
 					id: uuid.new(),
-					name:  getRoverName(state),
+					name: getRoverName(state),
 					modules: [itemId, ...STOCK_MODULES],
 					mode: ROVER_MODES.WAIT,
 					status: ROVER_STATUSES.WAITING,
