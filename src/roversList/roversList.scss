@@ -269,6 +269,10 @@
 			background-image: url(../images/rover-bg-stuck.png);
 		}
 
+		&.img-rover-bg-garage {
+			background-image: url(../images/rover-bg-garage.png);
+		}
+
 		&.img-rover-bg {
 			-moz-animation-duration: 0.75s;
 			-moz-animation-iteration-count: infinite;
