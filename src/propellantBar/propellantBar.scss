@@ -1,17 +1,30 @@
 .propellantBar {
 	text-align: center;
+	position: relative;
+	&.launch-ready {
+		@media (min-width: 800px) {
+			border: 0;
+			background: 0;
+			margin: 0;
+			padding: .5em 0;
+		}
+	}
 }
 
 .propellantBar-label {
-	font-weight: bold;
-	font-size: 16px;
-	text-align: center;
-	max-width: 100%;
-	overflow-x: hidden;
+	@media (min-width: 800px) {
+		transform: rotate(270deg);
+		position: relative;
+		top: 9em;
+		text-transform: uppercase;
+		line-height: 0;
+		z-index: 1;
+	}
 }
 
 .propellantBar-percent {
 	text-align: center;
+	font-size: .8rem;
 }
 
 .button.propellantBar-button {
