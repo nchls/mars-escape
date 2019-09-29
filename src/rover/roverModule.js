@@ -1,6 +1,7 @@
 import shortUUID from 'short-uuid';
 import { RESTART_GAME } from '../app/appModule';
 import { TICK } from '../gameTicks/gameTicksModule';
+import { COMPLETE_TASK } from '../tasksList/tasksListModule';
 import { addOre } from '../oreCounter/oreCounterModule';
 import itemsData from '../data/items';
 
@@ -403,6 +404,8 @@ const uuid = shortUUID();
 const firstRoverName = getRoverName([]);
 const secondRoverName = getRoverName([{ name: firstRoverName }]);
 
+const STOCK_MODULES = itemsData.slice(4).filter((val) => val.isStock).map((val) => val.id);
+
 const initialState = Object.freeze([
 	{
 		id: uuid.new(),
@@ -418,7 +421,7 @@ const initialState = Object.freeze([
 	{
 		id: uuid.new(),
 		name: secondRoverName,
-		modules: [1, 5, 7, 9, 12, 14, 16, 19],
+		modules: [1, 5, 7, 9, 12, 14, 19],
 		mode: ROVER_MODES.MINE_ORE,
 		status: ROVER_STATUSES.WAITING,
 		progress: 0,
@@ -432,6 +435,26 @@ export const roversReducer = (state = initialState, action) => {
 	switch (action.type) {
 	case RESTART_GAME:
 		return initialState;
+	case COMPLETE_TASK: {
+		const { itemId } = action.data;
+		if ([1, 2, 3, 4].includes(itemId)) {
+			return [
+				...state,
+				{
+					id: uuid.new(),
+					name:  getRoverName(state),
+					modules: [itemId, ...STOCK_MODULES],
+					mode: ROVER_MODES.WAIT,
+					status: ROVER_STATUSES.WAITING,
+					progress: 0,
+					batterChage: 1,
+					tanksLoad: 0,
+					rescuingId: undefined,
+				},
+			];
+		}
+		return state;
+	}
 	case TICK:
 		return reduceRoverTick(state, action.dispatch, action.extraData.isDustStorm);
 	case SET_ROVER_STATUS: {

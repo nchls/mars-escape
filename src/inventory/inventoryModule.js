@@ -21,7 +21,10 @@ const inventoryReducer = (state = initialState, action) => {
 	case RESTART_GAME:
 		return initialState;
 	case COMPLETE_TASK:
-		return [...state, action.data];
+		if (![1, 2, 3, 4].includes(action.data.itemId)) {
+			return [...state, action.data];
+		}
+		return state;
 	case UNINSTALL_MODULE: {
 		const module = itemsData.find((checkItem) => checkItem.id === action.moduleId);
 		return [...state, { itemId: module.id }];
