@@ -578,7 +578,7 @@ const initialState = Object.freeze([
 	{
 		id: uuid.new(),
 		name: secondRoverName,
-		modules: Object.freeze([1, 5, 7, 9, 12, 14, 19]),
+		modules: Object.freeze([3, 6, 7, 11, 12, 13, 15, 20, 21]),
 		mode: ROVER_MODES.WAIT,
 		status: ROVER_STATUSES.WAITING,
 		progress: 0,
