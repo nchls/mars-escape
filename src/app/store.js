@@ -8,7 +8,7 @@ import { bestTimesReducer, elapsedTimeReducer } from '../endGame/endGameModule';
 import inventoryReducer from '../inventory/inventoryModule';
 import oreCounterReducer from '../oreCounter/oreCounterModule';
 import tasksListReducer from '../tasksList/tasksListModule';
-import { gameTickReducer } from '../gameTicks/gameTicksModule';
+import { gameTickReducer, changeGameSpeed } from '../gameTicks/gameTicksModule';
 import { roversReducer, propellantReducer } from '../rover/roverModule';
 import { roverDetailReducer } from '../roversList/roversListModule';
 import { tutorialProgressReducer, tutorialShownReducer } from '../tutorial/tutorialModule';
@@ -52,6 +52,11 @@ const store = createStore(
 	composeEnhancers(applyMiddleware(...middleware)),
 );
 
-store.dispatch(startApp());
+if (store.getState().tutorialProgress === 99) {
+	store.dispatch(startApp());
+} else {
+	store.dispatch(changeGameSpeed(0));
+}
+
 
 export default store;
