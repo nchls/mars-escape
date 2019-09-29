@@ -6,7 +6,7 @@ import './tutorial.scss';
 
 const tutorials = [
 	`
-		Welcome to Escape From Mars. Your objective is to collect rocket propellant to get off the planet as quickly as
+		Welcome to Mars Escape. Your objective is to collect rocket propellant to get off the planet as quickly as
 		possible by sending robotic rovers out to mine ice. You'll also need to collect ore for building new rovers
 		and parts.
 	`,
