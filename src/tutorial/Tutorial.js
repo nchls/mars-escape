@@ -16,7 +16,7 @@ const tutorials = [
 		configuration view and give them a job.
 	`,
 	`
-		You can buy new rovers and parts in the Build menu. Upgrade your rover with stronger motors, better
+		You can buy new rovers and parts with the Build buttons under Tasks. Upgrade your rover with stronger motors, better
 		drills, larger tanks, etc. to increase your resource collection. Once a part is finished building, you can equip
 		it to any rover that's waiting in the garage.
 	`,
