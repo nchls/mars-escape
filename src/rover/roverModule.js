@@ -339,7 +339,7 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			rover.batteryCharge = 0;
 			if (newStatus === ROVER_STATUSES.TOWING) {
 				const droppedId = rover.rescuingId;
-				setRoverStatusHelper(droppedId, ROVER_STATUSES.LOST);
+				setTimeout(() => setRoverStatus(droppedId, ROVER_STATUSES.LOST)(dispatch), 1);
 				rover.rescuingId = undefined;
 			}
 			if (![ROVER_STATUSES.WAIT, ROVER_STATUSES.TOWED, ROVER_STATUSES.FALLEN_OFF_CLIFF].includes(rover.status)) {
@@ -402,7 +402,7 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 				}
 				if (mode === ROVER_MODES.RESCUE) {
 					setRoverStatusHelper(rover.id, ROVER_STATUSES.TOWING);
-					setRoverStatusHelper(rescuingId, ROVER_STATUSES.TOWED);
+					setTimeout(() => setRoverStatus(rescuingId, ROVER_STATUSES.TOWED)(dispatch), 1);
 				}
 			}
 		}
