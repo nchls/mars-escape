@@ -18,6 +18,7 @@ import {
 	uninstallModule,
 	enqueueTask,
 	installModule,
+	forgetRover,
 } from '../rover/roverModule';
 import {
 	openRoverDetail,
@@ -160,6 +161,7 @@ const RoversList = ({
 	uninstallModule,
 	enqueueTask,
 	installModule,
+	forgetRover,
 }) => {
 	const [isNameEditOpen, setIsNameEditOpen] = useState(false);
 	const [inputName, setInputName] = useState('');
@@ -167,6 +169,7 @@ const RoversList = ({
 	const progressStatuses = [
 		ROVER_STATUSES.TRAVELING_ORE,
 		ROVER_STATUSES.TRAVELING_ICE,
+		ROVER_STATUSES.TRAVELING_RESCUE,
 		ROVER_STATUSES.RETURNING,
 		ROVER_STATUSES.TOWING,
 	];
@@ -176,6 +179,9 @@ const RoversList = ({
 			<h2 className="title is-5">Rovers</h2>
 			<ul>
 				{ rovers.map((rover) => {
+					if (rover.forgotten) {
+						return null;
+					}
 					const modules = getRoverModules(rover);
 					if (rover.id !== roverDetail) {
 						const progress = Math.floor(100 * rover.progress);
@@ -250,6 +256,16 @@ const RoversList = ({
 											<i className="fas fa-box-open" />
 										</div>
 									) }
+									{ rover.status === ROVER_STATUSES.FALLEN_OFF_CLIFF ? (
+										<div className="forget-rover">
+											<button
+												className="button is-black"
+												onClick={() => forgetRover(rover.id)}
+											>
+												Forget
+											</button>
+										</div>
+									) : null }
 								</div>
 							</li>
 						);
@@ -435,6 +451,7 @@ const mapDispatchToProps = (dispatch) => {
 		uninstallModule: (roverId, moduleId) => uninstallModule(roverId, moduleId)(dispatch),
 		installModule: (rover, moduleId) => installModule(rover, moduleId)(dispatch),
 		enqueueTask: (...args) => enqueueTask(...args)(dispatch),
+		forgetRover: (roverId) => forgetRover(roverId)(dispatch),
 	};
 };
 
