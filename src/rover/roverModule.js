@@ -302,9 +302,8 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 		const batteryCapacity = getRoverBatteryCapacity(rover);
 		const drivingSpeed = getRoverDrivingSpeed(rover, rovers);
 		const workRandomness = (Math.random() * WORK_RANDOMNESS) + (1 - (WORK_RANDOMNESS / 2));
-		let newStatus = status;
 		const setRoverStatusHelper = (roverId, status) => {
-			newStatus = status;
+			rover.status = status;
 			setTimeout(() => setRoverStatus(roverId, status)(dispatch), 1);
 		};
 
