@@ -4,6 +4,7 @@ import { INSTALL_MODULE, UNINSTALL_MODULE, ADD_MODULE_TO_INVENTORY } from '../ro
 
 import itemsData from '../data/items';
 
+const REMOVE_ITEM_FROM_INVENTORY = 'REMOVE_ITEM_FROM_INVENTORY';
 
 const initialState = Object.freeze(itemsData.reduce((accumulator, item) => {
 	if (!item.isStock) {
@@ -15,6 +16,8 @@ const initialState = Object.freeze(itemsData.reduce((accumulator, item) => {
 	}
 	return accumulator;
 }, []));
+
+export const removeItemFromInventory = (moduleId) => ({ type: REMOVE_ITEM_FROM_INVENTORY, moduleId });
 
 const inventoryReducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -29,6 +32,7 @@ const inventoryReducer = (state = initialState, action) => {
 		const module = itemsData.find((checkItem) => checkItem.id === action.moduleId);
 		return [...state, { itemId: module.id }];
 	}
+	case REMOVE_ITEM_FROM_INVENTORY:
 	case INSTALL_MODULE: {
 		const newState = [...state];
 

@@ -330,7 +330,7 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			}
 			if (mode === ROVER_MODES.MINE_ORE) {
 				const ore = rover.tanksLoad * ORE_LOAD_MULTIPLICAND;
-				setTimeout(() => addOre(ore)(dispatch), 1);
+				setTimeout(() => dispatch(addOre(ore)), 1);
 			}
 			rover.tanksLoad = 0;
 			rover.progress = 0;

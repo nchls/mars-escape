@@ -2,9 +2,8 @@ import { RESTART_GAME } from '../app/appModule';
 import { BUILD_ITEM } from '../buildDialog/buildDialogModule';
 import { CANCEL_TASK } from '../tasksList/tasksListModule';
 
-
 export const ADD_ORE = 'ADD_ORE';
-export const addOre = (ore) => (dispatch) => dispatch({ type: ADD_ORE, data: { ore: ore } });
+export const addOre = (ore) => ({ type: ADD_ORE, data: { ore: ore } });
 
 const oreCounterReducer = (state = 0, { type, data }) => {
 	switch (type) {

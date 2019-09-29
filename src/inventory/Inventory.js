@@ -1,9 +1,10 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
-import './inventory.scss';
-
 import { getItem } from '../data/items';
+import { addOre } from '../oreCounter/oreCounterModule';
+import { removeItemFromInventory } from './inventoryModule';
+import './inventory.scss';
 
 /**
  * Group together inventory items, by their count
@@ -25,22 +26,37 @@ const groupInventory = (inventory) => {
 	return Object.values(groups).sort((a, b) => a.name.localeCompare(b.name));
 };
 
-const Item = ({ item }) => {
+const Item = ({ item, scrap, remove }) => {
 	return (
 		// eslint-disable-next-line jsx-a11y/anchor-is-valid
-		<a className="list-item" href="#">
-			{item.name} ({item.count})
-		</a>
+		<div className="list-item inventory-item">
+			<span>{item.name} ({item.count})</span>
+			{
+				item.cost && item.id
+					? (
+						<button
+							className="button inventory-item-scrap"
+							onClick={() => {
+								remove(item.id);
+								scrap(Math.floor(item.cost / 2));
+							}}
+						>
+							Scrap
+						</button>
+					)
+					: null
+			}
+		</div>
 	);
 };
 
-const Inventory = ({ inventory }) => {
+const Inventory = ({ inventory, addOre, removeItemFromInventory }) => {
 	const groupedInventory = groupInventory(inventory);
 	return (
 		<>
 			<p>Inventory</p>
 			<div className="list is-hoverable">
-				{groupedInventory.map((item) => <Item key={item.id} item={item} />)}
+				{groupedInventory.map((item) => <Item key={item.id} item={item} scrap={addOre} remove={removeItemFromInventory} />)}
 			</div>
 		</>
 	);
@@ -52,4 +68,6 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps)(Inventory);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ addOre, removeItemFromInventory }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Inventory);
