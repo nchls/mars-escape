@@ -92,6 +92,8 @@ html {
     font-weight: bold;
     font-size: 1.5em;
     color: black;
+    border: 4px solid black;
+    font-family: $family-sans-serif;
     &-success {
         background-color: $success;
     }
