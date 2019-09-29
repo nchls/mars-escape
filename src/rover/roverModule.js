@@ -649,7 +649,7 @@ export const roversReducer = (state = initialState, action) => {
 				enqueueTask(
 					rover.id,
 					taskId,
-					(...args) => setRoverMode(...args)(action.dispatch),
+					(roverId, name) => setRoverMode(roverId, name, false)(action.dispatch),
 					[rover.id, action.mode],
 					`Changing mode: ${action.mode}`,
 					`Queueing mode change: ${action.mode}`,
