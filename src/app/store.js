@@ -52,11 +52,6 @@ const store = createStore(
 	composeEnhancers(applyMiddleware(...middleware)),
 );
 
-if (store.getState().tutorialProgress === 99) {
-	store.dispatch(startApp());
-} else {
-	store.dispatch(changeGameSpeed(0));
-}
-
+store.dispatch(startApp());
 
 export default store;

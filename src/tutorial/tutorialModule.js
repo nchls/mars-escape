@@ -1,6 +1,5 @@
 import { setStorage, getStorage } from '../util/storage';
-import { START_APP, startApp } from '../app/appModule';
-import { changeGameSpeed } from '../gameTicks/gameTicksModule';
+import { START_APP } from '../app/appModule';
 
 const SET_TUTORIAL_PROGRESS = 'SET_TUTORIAL_PROGRESS';
 const SHOW_TUTORIAL = 'SHOW_TUTORIAL';
@@ -16,17 +15,13 @@ export const setTutorialProgress = (progressId) => (dispatch) => {
 	dispatch({ type: SET_TUTORIAL_PROGRESS, data: { progressId } });
 };
 
-export const tutorialProgressReducer = (state = getTutorialState(), { type, data, dispatch }) => {
+export const tutorialProgressReducer = (state = getTutorialState(), { type, data }) => {
 	switch (type) {
 	case START_APP:
 		return getTutorialState();
 	case SET_TUTORIAL_PROGRESS:
 		if (data.progressId === 99) {
 			setTutorialState(99);
-			setTimeout(() => {
-				dispatch(startApp());
-				dispatch(changeGameSpeed(1));
-			}, 2);
 		}
 		return data.progressId;
 	default:
