@@ -38,7 +38,7 @@ const Thingus = ({ item, buildItem, ore }) => {
 					<span className="value">{Math.floor(item.weight / 8)}kg</span>
 				</div>
 				{ item.minSize && (
-					<div className="item-minsize">
+					<div className="item-minsize kv">
 						<span className="key">Min. rover size:&nbsp;</span>
 						<span className="value">{sizeLabels[item.minSize]}</span>
 					</div>
