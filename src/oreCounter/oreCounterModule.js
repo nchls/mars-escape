@@ -5,7 +5,7 @@ import { CANCEL_TASK } from '../tasksList/tasksListModule';
 export const ADD_ORE = 'ADD_ORE';
 export const addOre = (ore) => ({ type: ADD_ORE, data: { ore: ore } });
 
-const oreCounterReducer = (state = 3000, { type, data }) => {
+const oreCounterReducer = (state = 300, { type, data }) => {
 	switch (type) {
 	case RESTART_GAME:
 		return 300;
