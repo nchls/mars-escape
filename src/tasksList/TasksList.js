@@ -55,7 +55,9 @@ class TasksList extends Component {
 		return (
 			<>
 				<h2 className="title is-5">Tasks</h2>
-				<TasksContainer tasks={tasks} cancelTask={cancelTask} onSortEnd={this.onSortEnd} />
+				{ tasks.length ? (
+					<TasksContainer tasks={tasks} cancelTask={cancelTask} onSortEnd={this.onSortEnd} />
+				) : null }
 				<div className="buttons is-right">
 					<button className="button is-primary" onClick={() => openBuildDialog('rover')}>Build Rover</button>
 					<button className="button is-primary" onClick={() => openBuildDialog('module')}>Build Module</button>

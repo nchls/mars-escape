@@ -55,9 +55,13 @@ const Inventory = ({ inventory, addOre, removeItemFromInventory }) => {
 	return (
 		<>
 			<h2 className="title is-5">Inventory</h2>
-			<div className="list is-hoverable">
-				{groupedInventory.map((item) => <Item key={item.id} item={item} scrap={addOre} remove={removeItemFromInventory} />)}
-			</div>
+			{ groupedInventory.length ? (
+				<div className="list is-hoverable">
+					{groupedInventory.map((item) => (
+						<Item key={item.id} item={item} scrap={addOre} remove={removeItemFromInventory} />
+					))}
+				</div>
+			) : null }
 		</>
 	);
 };
