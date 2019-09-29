@@ -114,6 +114,11 @@ const getRoverSolarPanelCharge = (rover, isStorming) => {
 	return charge;
 };
 
+const getRoverHasRTG = (rover) => {
+	const modules = getRoverModules(rover);
+	return modules.find((module) => module.name === 'RTGenerator') !== undefined;
+};
+
 export const getRoverWeight = (rover, rovers) => {
 	const modules = getRoverModules(rover);
 	let weight = modules.reduce((accumulator, module) => {
@@ -297,13 +302,16 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			rover.batteryCharge -= ROVER_ENERGY_COSTS.MINING;
 		}
 
-		// Solar Panel stuff. We'll give the panels a chance to restore some power
+		// Solar Panel and RTG stuff. We'll give the power sources a chance to restore some power
 		// before we check if the rover is dead.
 		if (status !== ROVER_STATUSES.WAITING) {
-			rover.batteryCharge += getRoverSolarPanelCharge(rover, isDustStorm);
-			// if (isDustStorm) { debugger; }
-			if (rover.batteryCharge > batteryCapacity) {
+			if (getRoverHasRTG(rover)) {
 				rover.batteryCharge = batteryCapacity;
+			} else {
+				rover.batteryCharge += getRoverSolarPanelCharge(rover, isDustStorm);
+				if (rover.batteryCharge > batteryCapacity) {
+					rover.batteryCharge = batteryCapacity;
+				}
 			}
 		}
 

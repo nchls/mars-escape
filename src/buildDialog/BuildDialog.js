@@ -6,14 +6,22 @@ import { closeBuildDialog, buildItem } from './buildDialogModule';
 import { getAllItems } from '../data/items';
 import { makeNewTask } from '../tasksList/tasksListModule';
 
+const sizeLabels = {
+	1: 'Small',
+	2: 'Medium',
+	3: 'Large',
+	4: 'Huge',
+};
+
 const Thingus = ({ item, buildItem, ore }) => {
 	const disabled = item.cost > ore;
 	return (
 		<div className="box" href="#">
 			<h3 className="title is-3">{item.name}</h3>
 			Description: {item.description}<br />
-			Cost: {item.cost}<br />
-			Weight: {item.weight}<br />
+			Cost: {item.cost} ore<br />
+			Weight: {Math.floor(item.weight / 8)}kg<br />
+			{ item.minSize && <>Minimum rover size: {sizeLabels[item.minSize]}<br /></> }
 			<button
 				disabled={disabled}
 				onClick={() => buildItem(item.cost, makeNewTask(item))}

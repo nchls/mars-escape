@@ -1,3 +1,7 @@
+import { getRoverModules } from '../rover/roverModule';
+import itemsData from '../data/items';
+
+
 export const OPEN_ROVER_DETAIL = 'OPEN_ROVER_DETAIL';
 export const openRoverDetail = (id) => (dispatch) => dispatch({ type: OPEN_ROVER_DETAIL, id: id });
 
@@ -5,11 +9,14 @@ export const CLOSE_ROVER_DETAIL = 'CLOSE_ROVER_DETAIL';
 export const closeRoverDetail = () => (dispatch) => dispatch({ type: CLOSE_ROVER_DETAIL });
 
 export const getDistinctEquippableParts = (inventory, rover) => {
+	const modules = getRoverModules(rover);
+	const chassisId = modules.find((module) => module.name.includes('Rover')).id;
 	const parts = new Set();
 	inventory.forEach((item) => {
-		if (rover.modules.indexOf(item.itemId) === -1) {
-			parts.add(item.itemId);
-		}
+		const module = itemsData.find((checkItem) => checkItem.id === item.itemId);
+		if (rover.modules.indexOf(item.itemId) !== -1) { return; }
+		if (module.minSize && module.minSize > chassisId) { return; }
+		parts.add(item.itemId);
 	});
 	return Array.from(parts);
 };
