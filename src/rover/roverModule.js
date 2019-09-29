@@ -650,7 +650,8 @@ export const roversReducer = (state = initialState, action) => {
 			return true;
 		};
 		const taskAlreadyEnqueued = rover.taskQueue.find((enqueuedTask) => (
-			enqueuedTask.fn === task.fn && arraysEqual(enqueuedTask.args, task.args)));
+			enqueuedTask.taskId === task.taskId
+			|| (enqueuedTask.fn === task.fn && arraysEqual(enqueuedTask.args, task.args))));
 		if (!taskAlreadyEnqueued) {
 			rover.taskQueue.push(action.task);
 			if (task.showNotification && task.enqueuingMessage) {
