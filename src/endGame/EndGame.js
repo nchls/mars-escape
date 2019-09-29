@@ -2,16 +2,18 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { startApp, restartGame } from '../app/appModule';
+import { convertTicksToSols } from '../elapsedTime/ElapsedTime';
 import './endGame.scss';
 
-const EndGame = ({ bestTimes, propellant, startApp, restartGame }) => {
+const EndGame = ({ elapsedTime, bestTimes, propellant, startApp, restartGame }) => {
+	const formattedTime = convertTicksToSols(elapsedTime);
 	return (
 		<div className="container boxed scrollable endGame-wrapper">
 			{
 				propellant >= 1
 					? (
 						<div className="notification is-success endGame-success">
-							Wow! You did it! You escaped Mars. Maybe you should take a break. Or maybe you should try it again.
+							Wow! You did it! You escaped Mars in <strong>{formattedTime}</strong>. Maybe you should take a break. Or maybe you should try it again.
 						</div>
 					)
 					: (
@@ -37,7 +39,7 @@ const EndGame = ({ bestTimes, propellant, startApp, restartGame }) => {
 										bestTimes.map(({ date, time }, index) => (
 											<tr key={index}>
 												<td className="endGame-date">{date}</td>
-												<td className="endGame-time">{time} Sols</td>
+												<td className="endGame-time">{time}</td>
 											</tr>
 										))
 									}
@@ -52,8 +54,9 @@ const EndGame = ({ bestTimes, propellant, startApp, restartGame }) => {
 	);
 };
 
-const mapStateToProps = ({ bestTimes, propellant }) => {
+const mapStateToProps = ({ elapsedTime, bestTimes, propellant }) => {
 	return {
+		elapsedTime,
 		bestTimes,
 		propellant,
 	};

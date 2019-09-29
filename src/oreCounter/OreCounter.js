@@ -6,9 +6,10 @@ import './oreCounter.scss';
 
 const OreCounter = ({ ore }) => {
 	return (
-		<>
-			<strong>Ore:</strong> {ore}
-		</>
+		<div className="kv">
+			<span className="key">Ore:&nbsp;</span>
+			<span className="value">{ore}&nbsp;<i className="far fa-gem" /></span>
+		</div>
 	);
 };
 

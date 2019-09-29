@@ -34,11 +34,11 @@ const AppWrap = ({ gameOver, isBuildDialogOpen, isDustStorm, tutorialProgress })
 								<div className="elapsed-time over-storm">
 									<ElapsedTime />
 								</div>
-								<div className="ore-counter over-storm">
-									<OreCounter />
-								</div>
 								<div className="game-speed over-storm">
 									<GameSpeed />
+								</div>
+								<div className="ore-counter over-storm">
+									<OreCounter />
 								</div>
 							</div>
 						</div>

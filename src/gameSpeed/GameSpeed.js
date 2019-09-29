@@ -6,19 +6,36 @@ import { changeGameSpeed } from '../gameTicks/gameTicksModule';
 import './gameSpeed.scss';
 
 const GameSpeed = ({ gameSpeed, changeGameSpeed }) => {
-	const onChange = (event) => {
-		changeGameSpeed(parseInt(event.target.value));
-	};
-
 	return (
-		<p className="game-speed">
-			<span> Game speed: </span>
-			<select id="leave" onChange={onChange} value={gameSpeed}>
-				<option value="0">Paused</option>
-				<option value="1">Normal</option>
-				<option value="2">Fast</option>
-				<option value="3">Relativistic</option>
-			</select>
+		<p className="game-speed buttons has-addons">
+			<button
+				className={`button is-small${gameSpeed === 0 ? ' is-primary' : ' is-light'}`}
+				onClick={() => changeGameSpeed(0)}
+				title="Pause"
+			>
+				<i className="fas fa-pause" />
+			</button>
+			<button
+				className={`button is-small${gameSpeed === 1 ? ' is-primary' : ' is-light'}`}
+				onClick={() => changeGameSpeed(1)}
+				title="Normal speed"
+			>
+				<i className="fas fa-play is-light" />
+			</button>
+			<button
+				className={`button is-small${gameSpeed === 2 ? ' is-primary' : ' is-light'}`}
+				onClick={() => changeGameSpeed(2)}
+				title="Faster speed"
+			>
+				<i className="fas fa-step-forward" />
+			</button>
+			<button
+				className={`button is-small${gameSpeed === 3 ? ' is-primary' : ' is-light'}`}
+				onClick={() => changeGameSpeed(3)}
+				title="Relativistic speed"
+			>
+				<i className="fas fa-fast-forward" />
+			</button>
 		</p>
 	);
 };

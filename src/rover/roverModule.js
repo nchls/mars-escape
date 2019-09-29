@@ -213,7 +213,7 @@ export const getRoverStatusDisplay = (rover, rovers) => {
 		return rover.status;
 	}
 	const rescuingRover = rovers.find((checkRover) => checkRover.id === rover.rescuingId);
-	if (!rescuingRover) { return ''; };
+	if (!rescuingRover) { return ''; }
 	if (rover.status === ROVER_STATUSES.TRAVELING_RESCUE) {
 		return `Traveling to incapacitated ${rescuingRover.name}`;
 	}
