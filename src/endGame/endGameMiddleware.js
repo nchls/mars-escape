@@ -20,7 +20,7 @@ const endGameMiddleware = (store) => (next) => (action) => {
 				.reduce((acc, item) => acc + Math.floor(item.cost / 2), 0);
 			const finalOre = sellCost + ore;
 
-			if (length === stuckRovers.length || finalOre < 300) { // All rovers are broken and we can't bulid new ones
+			if (length === stuckRovers.length && finalOre < 300) { // All rovers are broken and we can't bulid new ones
 				const itemsInInventory = inventory.map((item) => item.itemId);
 
 				const functioningRovers = rovers // Then we check the rovers
