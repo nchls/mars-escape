@@ -92,6 +92,92 @@
 	}
 }
 
+@keyframes rover-bg {
+	0% {
+		background-image: url(../images/rover-bg1.png);
+	}
+
+	25% {
+		background-image: url(../images/rover-bg2.png);
+	}
+
+	50% {
+		background-image: url(../images/rover-bg3.png);
+	}
+
+	75% {
+		background-image: url(../images/rover-bg3.png);
+	}
+
+	100% {
+		background-image: url(../images/rover-bg1.png);
+	}
+}
+
+@keyframes basic-wheels {
+	0% {
+		background-image: url(../images/wheels-basic.png);
+	}
+
+	50% {
+		background-image: url(../images/wheels-basic2.png);
+	}
+
+	100% {
+		background-image: url(../images/wheels-basic.png);
+	}
+}
+
+@keyframes advanced-wheels {
+	0% {
+		background-image: url(../images/wheels-advanced.png);
+	}
+
+	50% {
+		background-image: url(../images/wheels-advanced2.png);
+	}
+
+	100% {
+		background-image: url(../images/wheels-advanced.png);
+	}
+}
+
+.img-wheels-basic {
+	.rover-module-image-not-moving & {
+		background-image: url(../images/wheels-basic.png);
+	}
+
+	.rover-module-image-moving & {
+		-moz-animation-duration: 0.4s;
+		-moz-animation-iteration-count: infinite;
+		-moz-animation-name: basic-wheels;
+		-webkit-animation-duration: 0.4s;
+		-webkit-animation-iteration-count: infinite;
+		-webkit-animation-name: basic-wheels;
+		animation-duration: 0.4s;
+		animation-iteration-count: infinite;
+		animation-name: basic-wheels;
+	}
+}
+
+.img-wheels-advanced {
+	.rover-module-image-not-moving & {
+		background-image: url(../images/wheels-advanced.png);
+	}
+
+	.rover-module-image-moving & {
+		-moz-animation-duration: 0.4s;
+		-moz-animation-iteration-count: infinite;
+		-moz-animation-name: advanced-wheels;
+		-webkit-animation-duration: 0.4s;
+		-webkit-animation-iteration-count: infinite;
+		-webkit-animation-name: advanced-wheels;
+		animation-duration: 0.4s;
+		animation-iteration-count: infinite;
+		animation-name: advanced-wheels;
+	}
+}
+
 .rover-module-image-wrapper {
 	width: 100%;
     padding-top: 72%;
@@ -110,6 +196,26 @@
 		background-repeat: no-repeat;
 		background-size: contain;
 
+		&.img-rover-bg-still {
+			background-image: url(../images/rover-bg-stuck.png);
+		}
+
+		&.img-rover-bg-stuck {
+			background-image: url(../images/rover-bg-stuck.png);
+		}
+
+		&.img-rover-bg {
+			-moz-animation-duration: 0.75s;
+			-moz-animation-iteration-count: infinite;
+			-moz-animation-name: rover-bg;
+			-webkit-animation-duration: 0.75s;
+			-webkit-animation-iteration-count: infinite;
+			-webkit-animation-name: rover-bg;
+			animation-duration: 0.75s;
+			animation-iteration-count: infinite;
+			animation-name: rover-bg;
+		}
+
 		&.img-rover-small {
 			background-image: url(../images/rover-small.png);
 		}
@@ -124,14 +230,6 @@
 
 		&.img-rover-huge {
 			background-image: url(../images/rover-huge.png);
-		}
-
-		&.img-wheels-basic {
-			background-image: url(../images/wheels-basic.png);
-		}
-
-		&.img-wheels-advanced {
-			background-image: url(../images/wheels-advanced.png);
 		}
 
 		&.img-battery-small {

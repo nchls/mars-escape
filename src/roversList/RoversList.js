@@ -114,17 +114,39 @@ const AvailableModule = ({ rover, module, installationDisabled, installModule, e
 	);
 };
 
-const RoverModuleImage = ({ modules }) => (
-	<div className="rover-module-image-wrapper">
-		{
-			modules
-				.filter((module) => module.image)
-				.map(({ image, name }) => (
-					<div key={name} className={`rover-module-img ${image}`} role="presentation" />
-				))
-		}
-	</div>
-);
+const RoverModuleImage = ({ modules, status }) => {
+	const isMoving = status === ROVER_STATUSES.TRAVELING_ICE
+		|| status === ROVER_STATUSES.TRAVELING_ORE
+		|| status === ROVER_STATUSES.TRAVELING_RESCUE
+		|| status === ROVER_STATUSES.TOWING
+		|| status === ROVER_STATUSES.TOWED
+		|| status === ROVER_STATUSES.LOST;
+
+	return (
+		<div className={`rover-module-image-wrapper ${isMoving ? 'rover-module-image-moving' : 'rover-module-image-not-moving'}`}>
+			{
+				isMoving
+					? (<div className="rover-module-img img-rover-bg" role="presentation" />)
+					: (<div className="rover-module-img img-rover-bg-still" role="presentation" />)
+			}
+
+			{
+				status !== ROVER_STATUSES.FALLEN_OFF_CLIFF
+					? modules
+						.filter((module) => module.image)
+						.map(({ image, name }) => (
+							<div key={name} className={`rover-module-img ${image}`} role="presentation" />
+						))
+					: null
+			}
+			{
+				status === ROVER_STATUSES.STUCK || status === ROVER_STATUSES.OUT_OF_POWER
+					? (<div className="rover-module-img img-rover-bg-stuck" role="presentation" />)
+					: null
+			}
+		</div>
+	);
+};
 
 const RoversList = ({
 	rovers,
@@ -291,7 +313,7 @@ const RoversList = ({
 								<div className="field">
 									{ rover.taskQueue && rover.taskQueue.map((task) => {
 										return (
-											<p>{task.description}</p>
+											<p key={task.taskId}>{task.description}</p>
 										);
 									}) }
 								</div>
@@ -355,7 +377,7 @@ const RoversList = ({
 								<span className="value">{ Math.floor(getRoverDrivingSpeed(rover, rovers) * 250) }kph</span>
 							</div>
 							<div className="rover-image">
-								<RoverModuleImage modules={modules} />
+								<RoverModuleImage modules={modules} status={rover.status} />
 							</div>
 
 							<div className="buttons is-right">
