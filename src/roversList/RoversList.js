@@ -313,7 +313,7 @@ const RoversList = ({
 								<div className="field">
 									{ rover.taskQueue && rover.taskQueue.map((task) => {
 										return (
-											<p>{task.description}</p>
+											<p key={task.taskId}>{task.description}</p>
 										);
 									}) }
 								</div>

@@ -442,21 +442,6 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			rover.tanksLoad = 0;
 			rover.progress = 0;
 			rover.status = ROVER_STATUSES.WAITING;
-
-			// look out!
-			const dequeueTasks = (taskQueue) => {
-				if (taskQueue.length) {
-					const nextTask = taskQueue.shift();
-					if (nextTask.showNotification && nextTask.dequeuingMessage) {
-						showToast(nextTask.dequeuingMessage, { isSuccess: true });
-					}
-					nextTask.fn(...nextTask.args);
-					setTimeout(() => dequeueTasks(taskQueue), 2);
-				}
-			};
-			if (rover.taskQueue && rover.taskQueue.length) {
-				setTimeout(() => dequeueTasks(rover.taskQueue), 2);
-			}
 		}
 
 		if (status === ROVER_STATUSES.TOWING && progress >= 1) {
@@ -465,6 +450,8 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			rover.status = ROVER_STATUSES.WAITING;
 			setTimeout(() => setRoverStatus(rescuingId, ROVER_STATUSES.WAITING)(dispatch), 1);
 		}
+
+		
 
 		return rover;
 	});
@@ -550,7 +537,7 @@ const initialState = Object.freeze([
 	{
 		id: uuid.new(),
 		name: firstRoverName,
-		modules: [1, 5, 7, 9, 12, 14, 19],
+		modules: Object.freeze([1, 5, 7, 9, 12, 14, 19]),
 		mode: ROVER_MODES.WAIT,
 		status: ROVER_STATUSES.WAITING,
 		progress: 0,
@@ -561,7 +548,7 @@ const initialState = Object.freeze([
 	{
 		id: uuid.new(),
 		name: secondRoverName,
-		modules: [1, 5, 7, 9, 12, 14, 19],
+		modules: Object.freeze([1, 5, 7, 9, 12, 14, 19]),
 		mode: ROVER_MODES.WAIT,
 		status: ROVER_STATUSES.WAITING,
 		progress: 0,
@@ -601,6 +588,23 @@ export const roversReducer = (state = initialState, action) => {
 		const newState = [...state];
 		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
 		rover.status = action.status;
+		// Transition back to garage
+		if (action.status === ROVER_STATUSES.WAITING) {
+			// look out!
+			const dequeueTasks = (taskQueue) => {
+				if (taskQueue.length) {
+					const nextTask = taskQueue.shift();
+					if (nextTask.showNotification && nextTask.dequeuingMessage) {
+						showToast(nextTask.dequeuingMessage, { isSuccess: true });
+					}
+					nextTask.fn(...nextTask.args);
+					setTimeout(() => dequeueTasks(taskQueue), 2);
+				}
+			};
+			if (rover.taskQueue && rover.taskQueue.length) {
+				setTimeout(() => dequeueTasks(rover.taskQueue), 2);
+			}
+		}
 		return newState;
 	}
 	case SET_ROVER_MODE: {
@@ -614,7 +618,7 @@ export const roversReducer = (state = initialState, action) => {
 				enqueueTask(
 					rover.id,
 					taskId,
-					setRoverMode,
+					(...args) => setRoverMode(...args)(action.dispatch),
 					[rover.id, action.mode],
 					`Changing mode: ${action.mode}`,
 					`Queueing mode change: ${action.mode}`,
@@ -660,14 +664,16 @@ export const roversReducer = (state = initialState, action) => {
 	case UNINSTALL_MODULE: {
 		const newState = [...state];
 		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
-		rover.modules = rover.modules.filter((checkModuleId) => checkModuleId !== action.moduleId);
+		rover.modules = [...rover.modules.filter((checkModuleId) => checkModuleId !== action.moduleId)];
 
 		// Restore stock parts
 		const module = itemsData.find((checkItem) => checkItem.id === action.moduleId);
-		if (module.name === 'Motors (advanced)') { rover.modules.push(5); }
-		if (module.name === 'Wheels (advanced)') { rover.modules.push(7); }
-		if (module.name === 'Battery (medium)' || module.name === 'Battery (large)') { rover.modules.push(9); }
-		if (module.name === 'GPS') { rover.modules.push(12); }
+		if (module.name === 'Motors (advanced)') { rover.modules = [...rover.modules, 5]; }
+		if (module.name === 'Wheels (advanced)') { rover.modules = [...rover.modules, 7]; }
+		if (module.name === 'Battery (medium)' || module.name === 'Battery (large)') {
+			rover.modules = [...rover.modules, 9];
+		}
+		if (module.name === 'GPS') { rover.modules = [...rover.modules, 12]; }
 
 		return newState;
 	}
@@ -675,7 +681,7 @@ export const roversReducer = (state = initialState, action) => {
 		const newState = [...state];
 		const rover = newState.find((checkRover) => checkRover.id === action.rover.id);
 		const module = itemsData.find((checkItem) => checkItem.id === action.moduleId);
-		rover.modules.push(action.moduleId);
+		rover.modules = [...rover.modules, action.moduleId];
 		if (module.name.indexOf('Battery') !== -1) {
 			rover.batteryCharge = 0.1;
 		}
@@ -684,7 +690,7 @@ export const roversReducer = (state = initialState, action) => {
 		if (module.replaces) {
 			const replacedModules = rover.modules.filter((checkModuleId) => (
 				module.replaces.indexOf(checkModuleId) !== -1));
-			rover.modules = rover.modules.filter((checkModuleId) => module.replaces.indexOf(checkModuleId) === -1);
+			rover.modules = [...rover.modules.filter((checkModuleId) => module.replaces.indexOf(checkModuleId) === -1)];
 
 			// Tell the inventory about the parts that were removed
 			replacedModules.forEach((replacedModuleId) => {
