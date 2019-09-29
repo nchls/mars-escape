@@ -442,21 +442,6 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			rover.tanksLoad = 0;
 			rover.progress = 0;
 			rover.status = ROVER_STATUSES.WAITING;
-
-			// look out!
-			const dequeueTasks = (taskQueue) => {
-				if (taskQueue.length) {
-					const nextTask = taskQueue.shift();
-					if (nextTask.showNotification && nextTask.dequeuingMessage) {
-						showToast(nextTask.dequeuingMessage, { isSuccess: true });
-					}
-					nextTask.fn(...nextTask.args);
-					setTimeout(() => dequeueTasks(taskQueue), 2);
-				}
-			};
-			if (rover.taskQueue && rover.taskQueue.length) {
-				setTimeout(() => dequeueTasks(rover.taskQueue), 2);
-			}
 		}
 
 		if (status === ROVER_STATUSES.TOWING && progress >= 1) {
@@ -465,6 +450,8 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			rover.status = ROVER_STATUSES.WAITING;
 			setTimeout(() => setRoverStatus(rescuingId, ROVER_STATUSES.WAITING)(dispatch), 1);
 		}
+
+		
 
 		return rover;
 	});
@@ -601,6 +588,23 @@ export const roversReducer = (state = initialState, action) => {
 		const newState = [...state];
 		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
 		rover.status = action.status;
+		// Transition back to garage
+		if (action.status === ROVER_STATUSES.WAITING) {
+			// look out!
+			const dequeueTasks = (taskQueue) => {
+				if (taskQueue.length) {
+					const nextTask = taskQueue.shift();
+					if (nextTask.showNotification && nextTask.dequeuingMessage) {
+						showToast(nextTask.dequeuingMessage, { isSuccess: true });
+					}
+					nextTask.fn(...nextTask.args);
+					setTimeout(() => dequeueTasks(taskQueue), 2);
+				}
+			};
+			if (rover.taskQueue && rover.taskQueue.length) {
+				setTimeout(() => dequeueTasks(rover.taskQueue), 2);
+			}
+		}
 		return newState;
 	}
 	case SET_ROVER_MODE: {
