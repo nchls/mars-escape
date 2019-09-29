@@ -65,7 +65,7 @@ export const ROVER_TANK_RESOURCE_WEIGHT_MULTIPLICAND = 400;
 
 export const STUCK_IN_SAND_RISK = 0.002;
 
-export const FALLEN_OFF_CLIFF_RISK = 0.0006;
+export const FALLEN_OFF_CLIFF_RISK = 0.0001;
 
 // This is fiddly. A large panel will keep a battery fully topped up at
 // ~0.000025, and will have negligable effect if we go much below 0.00001
@@ -82,6 +82,18 @@ export const getRoverMotorsPowerDraw = (rover) => {
 	const powerDraw = modules.reduce((accumulator, module) => {
 		let val = accumulator;
 		if (module.name.indexOf('Motors') !== -1) {
+			val += module.powerDraw;
+		}
+		return val;
+	}, 0);
+	return powerDraw;
+};
+
+export const getRoverDrillPowerDraw = (rover) => {
+	const modules = getRoverModules(rover);
+	const powerDraw = modules.reduce((accumulator, module) => {
+		let val = accumulator;
+		if (module.name.indexOf('Drill') !== -1) {
 			val += module.powerDraw;
 		}
 		return val;
@@ -107,7 +119,7 @@ const getRoverSolarPanelCharge = (rover, isStorming) => {
 		SOLAR_PANEL_BASE_CAPACITY * (isStorming ? SOLAR_PANEL_DUST_STORM_CAPACITY_MULTIPLICAND : 1));
 	const charge = modules.reduce((accumulator, module) => {
 		let val = accumulator;
-		if (module.name.indexOf('Solar panel') !== -1) {
+		if (module.name.indexOf('Solar') !== -1) {
 			val += module.current * chargeMultiplicand;
 		}
 		return val;
@@ -300,7 +312,9 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 		}
 
 		if (MINING_STATUSES.includes(status)) {
-			rover.batteryCharge -= ROVER_ENERGY_COSTS.MINING;
+			const drillPowerDraw = getRoverDrillPowerDraw(rover);
+			const miningCost = ROVER_ENERGY_COSTS.MINING * drillPowerDraw;
+			rover.batteryCharge -= miningCost;
 		}
 
 		// Solar Panel and RTG stuff. We'll give the power sources a chance to restore some power
@@ -414,6 +428,7 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			}
 		}
 
+		// Transition back to the garage
 		if (status === ROVER_STATUSES.RETURNING && progress >= 1) {
 			if (mode === ROVER_MODES.MINE_ICE) {
 				const propellant = rover.tanksLoad * PROPELLANT_LOAD_MULTIPLICAND;
@@ -427,6 +442,21 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 			rover.tanksLoad = 0;
 			rover.progress = 0;
 			rover.status = ROVER_STATUSES.WAITING;
+
+			// look out!
+			const dequeueTasks = (taskQueue) => {
+				if (taskQueue.length) {
+					const nextTask = taskQueue.shift();
+					if (nextTask.showNotification && nextTask.dequeuingMessage) {
+						showToast(nextTask.dequeuingMessage, { isSuccess: true });
+					}
+					nextTask.fn(...nextTask.args);
+					setTimeout(() => dequeueTasks(taskQueue), 2);
+				}
+			};
+			if (rover.taskQueue && rover.taskQueue.length) {
+				setTimeout(() => dequeueTasks(rover.taskQueue), 2);
+			}
 		}
 
 		if (status === ROVER_STATUSES.TOWING && progress >= 1) {
@@ -482,6 +512,24 @@ export const installModule = (rover, moduleId) => (dispatch) => dispatch({
 	rover: rover,
 	moduleId: moduleId,
 });
+
+export const ENQUEUE_TASK = 'ENQUEUE_TASK';
+export const enqueueTask = (
+	(roverId, taskId, fn, args, description, enqueuingMessage, dequeuingMessage, showNotification = false) => (
+		(dispatch) => dispatch({
+			type: ENQUEUE_TASK,
+			roverId,
+			taskId,
+			task: {
+				fn,
+				args,
+				description,
+				enqueuingMessage,
+				dequeuingMessage,
+				roverId,
+				showNotification,
+			},
+		})));
 
 // Action for telling inventory about an item replaced on a rover
 export const ADD_MODULE_TO_INVENTORY = 'ADD_MODULE_TO_INVENTORY';
@@ -558,13 +606,55 @@ export const roversReducer = (state = initialState, action) => {
 	case SET_ROVER_MODE: {
 		const newState = [...state];
 		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
-		rover.mode = action.mode;
+		if (rover.status === ROVER_STATUSES.WAITING) {
+			rover.mode = action.mode;
+		} else {
+			const taskId = `setRoverMode(${rover.id},${action.mode})`;
+			setTimeout(() => (
+				enqueueTask(
+					rover.id,
+					taskId,
+					setRoverMode,
+					[rover.id, action.mode],
+					`Changing mode: ${action.mode}`,
+					`Queueing mode change: ${action.mode}`,
+					`Mode changed: ${action.mode}`,
+					true, // showNotification
+				)(action.dispatch)), 1);
+		}
 		return newState;
 	}
 	case SET_ROVER_NAME: {
 		const newState = [...state];
 		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
 		rover.name = action.name;
+		return newState;
+	}
+	case ENQUEUE_TASK: {
+		const newState = [...state];
+		const { task } = action;
+		const rover = newState.find((checkRover) => checkRover.id === action.roverId);
+		rover.taskQueue = rover.taskQueue || [];
+		const arraysEqual = (a, b) => {
+			// TODO: Check for/compare objects in the array
+			if (a === b) return true;
+			if (a == null || b == null) return false;
+			if (a.length !== b.length) return false;
+			for (let i = 0; i < a.length; ++i) {
+				if (a[i] !== b[i]) return false;
+			}
+			return true;
+		};
+		const taskAlreadyEnqueued = rover.taskQueue.find((enqueuedTask) => (
+			enqueuedTask.fn === task.fn && arraysEqual(enqueuedTask.args, task.args)));
+		if (!taskAlreadyEnqueued) {
+			rover.taskQueue.push(action.task);
+			if (task.showNotification && task.enqueuingMessage) {
+				showToast(task.enqueuingMessage, { isSuccess: true });
+			}
+		} else {
+			showToast('That task is already enqueued, ya dingus!', { isWarning: true });
+		}
 		return newState;
 	}
 	case UNINSTALL_MODULE: {
@@ -622,7 +712,7 @@ export const propellantReducer = (state = 0, action) => {
 	case RESTART_GAME:
 		return 0;
 	case ADD_PROPELLANT:
-		showToast(`${action.val} propellant added!`, { isSuccess: true });
+		showToast(`${action.val * 100}% propellant added!`, { isSuccess: true });
 		return state + action.val;
 	default:
 		return state;

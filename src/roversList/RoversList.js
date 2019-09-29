@@ -16,6 +16,7 @@ import {
 	setRoverMode,
 	setRoverName,
 	uninstallModule,
+	enqueueTask,
 	installModule,
 } from '../rover/roverModule';
 import {
@@ -39,14 +40,11 @@ const RoverWarning = ({ children }) => {
 	);
 };
 
-const InstalledModule = ({ rover, module, removalDisabled, uninstallModule }) => {
+const InstalledModule = ({ rover, module, removalDisabled, uninstallModule, enqueueTask }) => {
 	let title;
 	if (module.isStock) {
 		title = 'Stock part';
 	} else {
-		if (removalDisabled) {
-			title = 'You can uninstall a part only when the rover is in the garage.';
-		}
 		title = 'Uninstall this part';
 	}
 
@@ -54,13 +52,26 @@ const InstalledModule = ({ rover, module, removalDisabled, uninstallModule }) =>
 		<button
 			className="button is-small is-fullwidth"
 			onClick={() => {
-				if (!removalDisabled && !module.isStock) {
+				if (!module.isStock) {
+					if (removalDisabled) {
+						const taskId = `uninstallModule(${rover.id},${module.id})`;
+						return enqueueTask(
+							rover.id,
+							taskId,
+							uninstallModule,
+							[rover.id, module.id],
+							`Uninstall module: ${module.name}`,
+							`Queuing module uninstall: ${module.name}`,
+							`Uninstalling module: ${module.name}`,
+							true, // showNotifications
+						);
+					}
 					return uninstallModule(rover.id, module.id);
 				}
 			}}
 			title={title}
 		>
-			{ !module.isStock && !removalDisabled && (
+			{ !module.isStock && (
 				<span className="icon is-small">
 					<i className="fas fa-times-circle fa-align-right" />
 				</span>
@@ -70,23 +81,31 @@ const InstalledModule = ({ rover, module, removalDisabled, uninstallModule }) =>
 	);
 };
 
-const AvailableModule = ({ rover, module, installationDisabled, installModule }) => {
+const AvailableModule = ({ rover, module, installationDisabled, installModule, enqueueTask }) => {
 	return (
 		<button
 			className="button is-small is-fullwidth"
 			onClick={() => {
-				if (!installationDisabled && !module.isStock) {
+				if (!module.isStock) {
+					if (installationDisabled) {
+						const taskId = `installModule(${rover.id},${module.id})`;
+						return enqueueTask(
+							rover.id,
+							taskId,
+							installModule,
+							[rover, module.id],
+							`Installing module: ${module.name}`,
+							`Queueing module install: ${module.name}`,
+							`Module installed: ${module.name}`,
+							true, // showNotifications
+						);
+					}
 					return installModule(rover, module.id);
 				}
 			}}
-			title={
-				installationDisabled
-					? 'You can install a part only when the rover is in the garage.'
-					: 'Install this part'
-			}
 		>
 			<span>{ module.name }</span>
-			{ !module.isStock && !installationDisabled && (
+			{ !module.isStock && (
 				<span className="icon is-small">
 					<i className="fas fa-plus-circle fa-align-right" />
 				</span>
@@ -116,6 +135,7 @@ const RoversList = ({
 	setRoverMode,
 	setRoverName,
 	uninstallModule,
+	enqueueTask,
 	installModule,
 }) => {
 	const [isNameEditOpen, setIsNameEditOpen] = useState(false);
@@ -239,40 +259,42 @@ const RoversList = ({
 							<h4 className="title is-6 mode-header">Job</h4>
 							<div
 								className="buttons has-addons is-centered mode-buttons"
-								title={
-									changesDisabled
-										? 'You can change a rover\'s mode only when it\'s in the garage.'
-										: null
-								}
 							>
 								<button
 									className={`button${rover.mode === ROVER_MODES.WAIT ? ' is-info' : ''}`}
-									disabled={changesDisabled}
 									onClick={() => setRoverMode(rover.id, ROVER_MODES.WAIT)}
 								>
 									Wait
 								</button>
 								<button
 									className={`button${rover.mode === ROVER_MODES.MINE_ICE ? ' is-info' : ''}`}
-									disabled={changesDisabled}
 									onClick={() => setRoverMode(rover.id, ROVER_MODES.MINE_ICE)}
 								>
 									Mine Ice
 								</button>
 								<button
 									className={`button${rover.mode === ROVER_MODES.MINE_ORE ? ' is-info' : ''}`}
-									disabled={changesDisabled}
 									onClick={() => setRoverMode(rover.id, ROVER_MODES.MINE_ORE)}
 								>
 									Mine Ore
 								</button>
 								<button
 									className={`button${rover.mode === ROVER_MODES.RESCUE ? ' is-info' : ''}`}
-									disabled={changesDisabled}
 									onClick={() => setRoverMode(rover.id, ROVER_MODES.RESCUE)}
 								>
 									Rescue
 								</button>
+							</div>
+
+							<h4 className="title is-6 task-queue-header">Queued Jobs</h4>
+							<div className="task-queue">
+								<div className="field">
+									{ rover.taskQueue && rover.taskQueue.map((task) => {
+										return (
+											<p>{task.description}</p>
+										);
+									}) }
+								</div>
 							</div>
 
 							<h4 className="title is-6 modules-header">Modules</h4>
@@ -289,6 +311,7 @@ const RoversList = ({
 														rover={rover}
 														module={module}
 														installModule={installModule}
+														enqueueTask={enqueueTask}
 													/>
 												</div>
 											);
@@ -309,6 +332,7 @@ const RoversList = ({
 														rover={rover}
 														module={module}
 														uninstallModule={uninstallModule}
+														enqueueTask={enqueueTask}
 													/>
 												</div>
 											);
@@ -361,6 +385,7 @@ const mapDispatchToProps = (dispatch) => {
 		setRoverName: (roverId, name) => setRoverName(roverId, name)(dispatch),
 		uninstallModule: (roverId, moduleId) => uninstallModule(roverId, moduleId)(dispatch),
 		installModule: (rover, moduleId) => installModule(rover, moduleId)(dispatch),
+		enqueueTask: (...args) => enqueueTask(...args)(dispatch),
 	};
 };
 
