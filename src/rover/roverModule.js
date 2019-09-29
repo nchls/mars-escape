@@ -342,7 +342,7 @@ const reduceRoverTick = (rovers, dispatch, isDustStorm) => {
 				setTimeout(() => setRoverStatus(droppedId, ROVER_STATUSES.LOST)(dispatch), 1);
 				rover.rescuingId = undefined;
 			}
-			if (![ROVER_STATUSES.WAIT, ROVER_STATUSES.TOWED, ROVER_STATUSES.FALLEN_OFF_CLIFF].includes(rover.status)) {
+			if (![ROVER_STATUSES.WAIT, ROVER_STATUSES.TOWED, ROVER_STATUSES.FALLEN_OFF_CLIFF, ROVER_STATUSES.OUT_OF_POWER].includes(rover.status)) {
 				setRoverStatusHelper(rover.id, ROVER_STATUSES.OUT_OF_POWER);
 				rover.tanksLoad = 0;
 				rover.progress = 0;
