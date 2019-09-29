@@ -9,11 +9,26 @@
 $top-bar-height: 2em;
 
 html {
-	background: url("bg.jpg") no-repeat center center fixed;
+	background: url("bg2.jpg") no-repeat center center fixed;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+}
+
+body {
+	background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(255,255,255,0.0) 20%,rgba(255,255,255,0.0) 80%,rgba(0,0,0,0.8) 100%);
+}
+
+.app-title h1.title,
+.elapsed-time,
+.ore-counter,
+.game-speed {
+	color: #e3e3e3;
+
+	strong {
+		color: #e3e3e3;
+	}
 }
 
 .over-storm {
@@ -22,7 +37,8 @@ html {
 }
 
 .top-bar {
-	height: $top-bar-height;
+	min-height: $top-bar-height;
+	padding: 0 0.5em;
 
 	header {
 		width: 100%;
