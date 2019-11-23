@@ -1,4 +1,5 @@
-# Mars game
+# Mars Escape
+This is a React JS resource management game about Mars rovers made for React Riot 2019.
 
 ## Running locally:
 * `npm install`
